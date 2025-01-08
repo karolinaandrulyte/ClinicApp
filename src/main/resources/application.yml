@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: ClinicsApp
+  datasource:
+    url: jdbc:mysql://localhost:3306/clinics
+    username: root
+    password: Labaisunkus1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  liquibase:
+    enabled: false  # Temporarily disable Liquibase
