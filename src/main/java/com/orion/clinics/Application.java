@@ -1,4 +1,4 @@
-package com.example.clinics;
+package com.orion.clinics;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

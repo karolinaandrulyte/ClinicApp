@@ -1,4 +1,4 @@
-package com.example.clinics;
+package com.orion.clinics;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
