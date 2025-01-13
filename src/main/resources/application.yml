@@ -2,13 +2,14 @@ spring:
   application:
     name: ClinicsApp
   datasource:
-    url: jdbc:mysql://localhost:3306/clinics
+    url: jdbc:mysql://localhost:3306/clinics?createDatabaseIfNotExist=true&useSSL=false
     username: root
     password: Labaisunkus1
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none # Disable Hibernate's schema management
     show-sql: true
   liquibase:
-    enabled: false  # Temporarily disable Liquibase
+    change-log: db/db.changelog-master.yaml
+    enabled: true

@@ -30,7 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// database
-	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.liquibase:liquibase-core:4.24.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// lombok
