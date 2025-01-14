@@ -39,8 +39,7 @@ CREATE TABLE `clinics`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `address` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `city_id` BIGINT UNSIGNED NOT NULL,
-    `document_id` BIGINT UNSIGNED NOT NULL
+    `city_id` BIGINT UNSIGNED NOT NULL
 );
 CREATE TABLE `cities`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -70,6 +69,11 @@ CREATE TABLE `clinic_status`(
     `status` VARCHAR(255) NOT NULL,
     PRIMARY KEY(`status`)
 );
+CREATE TABLE `clinics_documents`(
+    `clinic_id` BIGINT UNSIGNED NOT NULL,
+    `document_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY(`clinic_id`, `document_id`)
+);
 
 ALTER TABLE
     `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`specialty_id`) REFERENCES `specialties`(`id`);
@@ -84,11 +88,7 @@ ALTER TABLE
 ALTER TABLE
     `cities` ADD CONSTRAINT FOREIGN KEY(`country_name`) REFERENCES `countries`(`name`);
 ALTER TABLE
-    `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`specialty_id`) REFERENCES `doctors`(`id`);
-ALTER TABLE
     `doctors_clinics` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
-ALTER TABLE
-    `clinics` ADD CONSTRAINT FOREIGN KEY(`document_id`) REFERENCES `documents`(`id`);
 ALTER TABLE
     `doctors_records` ADD CONSTRAINT FOREIGN KEY(`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
@@ -97,3 +97,7 @@ ALTER TABLE
     `clinic_records` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
     `doctors_records` ADD CONSTRAINT FOREIGN KEY(`record_id`) REFERENCES `doctor_records`(`id`);
+ALTER TABLE
+    `clinics_documents` ADD CONSTRAINT FOREIGN KEY (`clinic_id`) REFERENCES `clinics`(`id`);
+ALTER TABLE
+    `clinics_documents` ADD CONSTRAINT FOREIGN KEY (`document_id`) REFERENCES `documents`(`id`)

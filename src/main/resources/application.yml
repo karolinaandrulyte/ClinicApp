@@ -11,5 +11,5 @@ spring:
       ddl-auto: none # Disable Hibernate's schema management
     show-sql: true
   liquibase:
-    change-log: db/db.changelog-master.yaml
+    change-log: db/database-changelog.yaml
     enabled: true
