@@ -6,4 +6,5 @@ import lombok.Data;
 public class CityDTO {
     private Long id;
     private String name;
+    private String country_ISO_code;
 }

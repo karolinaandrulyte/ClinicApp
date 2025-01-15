@@ -18,7 +18,7 @@ public class CityEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "country_name", referencedColumnName = "name")
+    @JoinColumn(name = "country_ISO_code", referencedColumnName = "ISO_code")
     private CountryEntity country;
 
     @OneToMany(mappedBy = "city")

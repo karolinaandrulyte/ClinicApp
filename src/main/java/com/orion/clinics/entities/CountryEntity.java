@@ -16,6 +16,8 @@ import java.util.List;
 public class CountryEntity {
 
     @Id
+    private String ISO_code;
+
     private String name;
 
     @OneToMany(mappedBy = "country")

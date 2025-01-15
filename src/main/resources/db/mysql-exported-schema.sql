@@ -44,11 +44,11 @@ CREATE TABLE `clinics`(
 CREATE TABLE `cities`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `country_name` VARCHAR(255) NOT NULL
+    `country_ISO_code` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `countries`(
-    `name` VARCHAR(255) NOT NULL,
-    PRIMARY KEY(`name`)
+    `ISO_code` VARCHAR(255) NOT NULL PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `documents`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +86,7 @@ ALTER TABLE
 ALTER TABLE
     `doctor_status` ADD CONSTRAINT FOREIGN KEY(`status`) REFERENCES `doctor_records`(`status_name`);
 ALTER TABLE
-    `cities` ADD CONSTRAINT FOREIGN KEY(`country_name`) REFERENCES `countries`(`name`);
+    `cities` ADD CONSTRAINT FOREIGN KEY(`country_ISO_code`) REFERENCES `countries`(`ISO_code`);
 ALTER TABLE
     `doctors_clinics` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
