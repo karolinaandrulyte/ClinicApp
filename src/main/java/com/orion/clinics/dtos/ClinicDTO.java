@@ -1,8 +1,5 @@
 package com.orion.clinics.dtos;
 
-import com.orion.clinics.entities.ClinicRecordEntity;
-import com.orion.clinics.entities.DoctorEntity;
-import com.orion.clinics.entities.DocumentEntity;
 import lombok.Data;
 
 import java.util.List;
@@ -12,8 +9,9 @@ public class ClinicDTO {
     private Long id;
     private String name;
     private String address;
-    private String city;
-    private List<DocumentEntity> documents;
-    private List<ClinicRecordEntity> records;
-    private List<DoctorEntity> doctors;
+    private CityDTO city;
+    private ClinicStatusDTO status;
+    private List<DocumentDTO> documents;
+    private List<ClinicRecordDTO> records;
+    private List<DoctorDTO> doctors;
 }

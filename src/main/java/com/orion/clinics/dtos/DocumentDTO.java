@@ -1,13 +1,14 @@
 package com.orion.clinics.dtos;
 
-import com.orion.clinics.entities.DocumentTypeEntity;
+import com.orion.clinics.helpers.DocumentType;
 import lombok.Data;
 
-import java.sql.Blob;
+import java.util.List;
 
 @Data
 public class DocumentDTO {
     private Long id;
-    private Blob content;
-    private DocumentTypeEntity type;
+    private String type;
+    private byte[] content;
+    private List<ClinicDTO> clinics;
 }

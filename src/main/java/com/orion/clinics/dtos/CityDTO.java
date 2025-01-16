@@ -2,9 +2,12 @@ package com.orion.clinics.dtos;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CityDTO {
     private Long id;
     private String name;
-    private String country_ISO_code;
+    private CountryDTO country;
+    private List<ClinicDTO> clinics;
 }

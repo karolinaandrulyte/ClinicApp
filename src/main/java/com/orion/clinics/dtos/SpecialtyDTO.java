@@ -2,8 +2,10 @@ package com.orion.clinics.dtos;
 
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class SpecialtyDTO {
-    private Long id;
     private String name;
+    private Set<DoctorDTO> doctors;
 }

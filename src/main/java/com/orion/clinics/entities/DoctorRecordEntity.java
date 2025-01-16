@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,10 +19,11 @@ public class DoctorRecordEntity {
     private String name;
     private LocalDateTime updated;
 
-    @ManyToMany(mappedBy = "doctorRecords")
-    private Set<DoctorEntity> doctors;
-
     @ManyToOne
     @JoinColumn(name = "status_name")
-    private DoctorStatusEntity status;
+    private RecordStatusEntity status;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private DoctorEntity doctor;
 }

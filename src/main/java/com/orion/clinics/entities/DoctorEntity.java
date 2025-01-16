@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,22 +23,23 @@ public class DoctorEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "date_of_birth")
+    private String dateOfBirth;
+
+    @Column(name = "address")
+    private String address;
+
     @ManyToMany
     @JoinTable(
             name = "doctors_specialties",
             joinColumns = @JoinColumn(name = "doctor_id"),
-            inverseJoinColumns = @JoinColumn(name = "specialty_id")
+            inverseJoinColumns = @JoinColumn(name = "specialty_name")
     )
     private Set<SpecialtyEntity> specialties;
 
-    @ManyToMany
-    @JoinTable(
-            name = "doctors_records",
-            joinColumns = @JoinColumn(name = "doctor_id"),
-            inverseJoinColumns = @JoinColumn(name = "record_id")
-    )
-    private Set<DoctorRecordEntity> doctorRecords;
-
     @ManyToMany(mappedBy = "doctors")
-    private Set<ClinicEntity> clinics;
+    private List<ClinicEntity> clinics;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<DoctorRecordEntity> records;
 }

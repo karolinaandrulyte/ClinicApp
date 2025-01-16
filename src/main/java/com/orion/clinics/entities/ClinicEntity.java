@@ -23,6 +23,10 @@ public class ClinicEntity {
     @JoinColumn(name = "city_id")
     private CityEntity city;
 
+    @ManyToOne
+    @JoinColumn(name = "status_name")  // Links to clinic_status table
+    private ClinicStatusEntity status;
+
     @ManyToMany
     @JoinTable(
             name = "clinics_documents",
@@ -40,7 +44,7 @@ public class ClinicEntity {
             joinColumns = @JoinColumn(name = "clinic_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    private Set<DoctorEntity> doctors;
+    private List<DoctorEntity> doctors;
 }
 
 

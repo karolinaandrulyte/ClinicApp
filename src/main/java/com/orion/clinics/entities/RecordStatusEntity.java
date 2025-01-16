@@ -3,17 +3,18 @@ package com.orion.clinics.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Set;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "doctor_status")
-public class DoctorStatusEntity {
+@Table(name = "record_status")
+public class RecordStatusEntity {
 
     @Id
     private String status;
 
     @OneToMany(mappedBy = "status")
-    private Set<DoctorRecordEntity> doctorRecords;
+    private List<DoctorRecordEntity> doctorRecords;
 }

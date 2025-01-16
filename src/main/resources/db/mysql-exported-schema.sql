@@ -1,34 +1,27 @@
 CREATE TABLE `doctors`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `first_name` VARCHAR(255) NOT NULL,
-    `last_name` VARCHAR(255) NOT NULL
+    `last_name` VARCHAR(255) NOT NULL,
+    `date_of_birth` DATE NOT NULL,
+    `address` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `specialties`(
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL
+    `name` VARCHAR(255) NOT NULL PRIMARY KEY
 );
 CREATE TABLE `doctors_specialties`(
     `doctor_id` BIGINT UNSIGNED NOT NULL,
-    `specialty_id` BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY(`doctor_id`, `specialty_id`)
+    `specialty_name` VARCHAR(255) NOT NULL,
+    PRIMARY KEY(`doctor_id`, `specialty_name`)
 );
 CREATE TABLE `doctor_records`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `doctor_id` BIGINT NOT NULL,
     `status_name` VARCHAR(255) NOT NULL,
     `updated` DATETIME NOT NULL,
-    UNIQUE(`doctor_id`, `status_name`), /*constrains combinations of doctor_id and status_name for each doc to have only one status*/
-    INDEX(`status_name`)
+    `doctor_id` BIGINT UNSIGNED NOT NULL
 );
-CREATE TABLE `doctor_status`(
-    `status` VARCHAR(255) NOT NULL,
-    PRIMARY KEY(`status`)
-);
-CREATE TABLE `doctors_records`(
-    `doctor_id` BIGINT UNSIGNED NOT NULL,
-    `record_id` BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY(`doctor_id`, `record_id`)
+CREATE TABLE `record_status`(
+    `status` VARCHAR(255) NOT NULL PRIMARY KEY
 );
 CREATE TABLE `doctors_clinics`(
     `doctor_id` BIGINT UNSIGNED NOT NULL,
@@ -44,20 +37,25 @@ CREATE TABLE `clinics`(
 CREATE TABLE `cities`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `country_ISO_code` VARCHAR(255) NOT NULL
+    `country_iso_code` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `countries`(
-    `ISO_code` VARCHAR(255) NOT NULL PRIMARY KEY,
+    `iso_code` VARCHAR(255) NOT NULL PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL
 );
+CREATE TABLE `document_types`(
+    `type` VARCHAR(255) NOT NULL PRIMARY KEY
+);
+INSERT INTO document_types (type) VALUES
+('CONSENT_FORM'),
+('PRESCRIPTION'),
+('LAB_REPORT'),
+('PAYMENT_RECEIPT'),
+('EMPLOYEE_RECORD');
 CREATE TABLE `documents`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `type_name` VARCHAR(255) NOT NULL,
     `content` BLOB NOT NULL
-);
-CREATE TABLE `document_types`(
-    `type` VARCHAR(255) NOT NULL,
-    PRIMARY KEY(`type`)
 );
 CREATE TABLE `clinic_records`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -66,8 +64,7 @@ CREATE TABLE `clinic_records`(
     `status_name` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `clinic_status`(
-    `status` VARCHAR(255) NOT NULL,
-    PRIMARY KEY(`status`)
+    `status` VARCHAR(255) NOT NULL PRIMARY KEY
 );
 CREATE TABLE `clinics_documents`(
     `clinic_id` BIGINT UNSIGNED NOT NULL,
@@ -76,27 +73,31 @@ CREATE TABLE `clinics_documents`(
 );
 
 ALTER TABLE
-    `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`specialty_id`) REFERENCES `specialties`(`id`);
+    `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`specialty_name`) REFERENCES `specialties`(`name`);
 ALTER TABLE
-    `clinic_records` ADD CONSTRAINT FOREIGN KEY(`status_name`) REFERENCES `clinic_status`(`status`);
+    `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
     `doctors` ADD CONSTRAINT FOREIGN KEY(`id`) REFERENCES `doctors_clinics`(`doctor_id`);
 ALTER TABLE
+    `doctor_records` ADD CONSTRAINT FOREIGN KEY (`status_name`) REFERENCES `record_status`(`status`);
+ALTER TABLE
+    `doctor_records` ADD CONSTRAINT FOREIGN KEY (`doctor_id`) REFERENCES `doctors`(`id`);
+ALTER TABLE
     `clinics` ADD CONSTRAINT FOREIGN KEY(`city_id`) REFERENCES `cities`(`id`);
 ALTER TABLE
-    `doctor_status` ADD CONSTRAINT FOREIGN KEY(`status`) REFERENCES `doctor_records`(`status_name`);
+    `record_status` ADD CONSTRAINT FOREIGN KEY(`status`) REFERENCES `doctor_records`(`status_name`);
 ALTER TABLE
-    `cities` ADD CONSTRAINT FOREIGN KEY(`country_ISO_code`) REFERENCES `countries`(`ISO_code`);
+    `cities` ADD CONSTRAINT FOREIGN KEY(`country_iso_code`) REFERENCES `countries`(`iso_code`);
 ALTER TABLE
     `doctors_clinics` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
-    `doctors_records` ADD CONSTRAINT FOREIGN KEY(`doctor_id`) REFERENCES `doctors`(`id`);
+    `doctors_clinics` ADD CONSTRAINT FOREIGN KEY (`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
     `documents` ADD CONSTRAINT FOREIGN KEY(`type_name`) REFERENCES `document_types`(`type`);
 ALTER TABLE
     `clinic_records` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
-    `doctors_records` ADD CONSTRAINT FOREIGN KEY(`record_id`) REFERENCES `doctor_records`(`id`);
+    `clinic_records` ADD CONSTRAINT FOREIGN KEY(`status_name`) REFERENCES `clinic_status`(`status`);
 ALTER TABLE
     `clinics_documents` ADD CONSTRAINT FOREIGN KEY (`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
