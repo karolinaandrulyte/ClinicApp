@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class DocumentDTO {
     private Long id;
-    private String type;
+    private DocumentType type;
     private byte[] content;
     private List<ClinicDTO> clinics;
 }

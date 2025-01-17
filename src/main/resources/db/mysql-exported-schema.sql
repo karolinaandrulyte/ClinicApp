@@ -46,15 +46,9 @@ CREATE TABLE `countries`(
 CREATE TABLE `document_types`(
     `type` VARCHAR(255) NOT NULL PRIMARY KEY
 );
-INSERT INTO document_types (type) VALUES
-('CONSENT_FORM'),
-('PRESCRIPTION'),
-('LAB_REPORT'),
-('PAYMENT_RECEIPT'),
-('EMPLOYEE_RECORD');
 CREATE TABLE `documents`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `type_name` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(255) NOT NULL,
     `content` BLOB NOT NULL
 );
 CREATE TABLE `clinic_records`(
@@ -93,7 +87,7 @@ ALTER TABLE
 ALTER TABLE
     `doctors_clinics` ADD CONSTRAINT FOREIGN KEY (`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
-    `documents` ADD CONSTRAINT FOREIGN KEY(`type_name`) REFERENCES `document_types`(`type`);
+    `documents` MODIFY COLUMN `type` VARCHAR(255) NOT NULL;
 ALTER TABLE
     `clinic_records` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE

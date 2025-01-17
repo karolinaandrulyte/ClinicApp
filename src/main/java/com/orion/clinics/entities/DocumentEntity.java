@@ -17,7 +17,7 @@ public class DocumentEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type_name")
+    @Column(name = "type")
     private DocumentType type;
 
     @Lob
