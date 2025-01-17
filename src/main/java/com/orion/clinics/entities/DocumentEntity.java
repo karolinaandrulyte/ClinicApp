@@ -4,7 +4,6 @@ import com.orion.clinics.helpers.DocumentType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +22,8 @@ public class DocumentEntity {
     @Lob
     private byte[] content;
 
-    @ManyToMany(mappedBy = "documents")
-    private List<ClinicEntity> clinics;
+    @ManyToOne
+    @JoinColumn(name = "clinic_id")
+    private ClinicEntity clinic;
 }
 

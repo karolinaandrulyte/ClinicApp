@@ -10,5 +10,5 @@ public class DocumentDTO {
     private Long id;
     private DocumentType type;
     private byte[] content;
-    private List<ClinicDTO> clinics;
+    private ClinicDTO clinic;
 }

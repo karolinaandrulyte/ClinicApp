@@ -49,7 +49,8 @@ CREATE TABLE `document_types`(
 CREATE TABLE `documents`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `type` VARCHAR(255) NOT NULL,
-    `content` BLOB NOT NULL
+    `content` BLOB NOT NULL,
+    `clinic_id` BIGINT UNSIGNED NOT NULL
 );
 CREATE TABLE `clinic_records`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -59,11 +60,6 @@ CREATE TABLE `clinic_records`(
 );
 CREATE TABLE `clinic_status`(
     `status` VARCHAR(255) NOT NULL PRIMARY KEY
-);
-CREATE TABLE `clinics_documents`(
-    `clinic_id` BIGINT UNSIGNED NOT NULL,
-    `document_id` BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY(`clinic_id`, `document_id`)
 );
 
 ALTER TABLE
@@ -89,10 +85,8 @@ ALTER TABLE
 ALTER TABLE
     `documents` MODIFY COLUMN `type` VARCHAR(255) NOT NULL;
 ALTER TABLE
+    `documents` ADD CONSTRAINT FOREIGN KEY (`clinic_id`) REFERENCES `clinics`(`id`);
+ALTER TABLE
     `clinic_records` ADD CONSTRAINT FOREIGN KEY(`clinic_id`) REFERENCES `clinics`(`id`);
 ALTER TABLE
     `clinic_records` ADD CONSTRAINT FOREIGN KEY(`status_name`) REFERENCES `clinic_status`(`status`);
-ALTER TABLE
-    `clinics_documents` ADD CONSTRAINT FOREIGN KEY (`clinic_id`) REFERENCES `clinics`(`id`);
-ALTER TABLE
-    `clinics_documents` ADD CONSTRAINT FOREIGN KEY (`document_id`) REFERENCES `documents`(`id`)
