@@ -46,10 +46,7 @@ public class RecordStatusService {
     public RecordStatusDTO update(String status, RecordStatusDTO recordStatusDTO) {
         RecordStatusEntity existingRecordStatus = recordStatusRepository.findById(status)
                 .orElseThrow(() -> new ResourceNotFoundException("Record status not found with status: " + status));
-
-        // Update fields
         existingRecordStatus.setStatus(recordStatusDTO.getStatus());
-
         RecordStatusEntity updatedRecordStatus = recordStatusRepository.save(existingRecordStatus);
         return recordStatusMapper.toRecordStatusDTO(updatedRecordStatus);
     }

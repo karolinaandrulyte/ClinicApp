@@ -1,6 +1,6 @@
 package com.orion.clinics.entities;
 
-import com.orion.clinics.helpers.DocumentType;
+import com.orion.clinics.enums.DocumentType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

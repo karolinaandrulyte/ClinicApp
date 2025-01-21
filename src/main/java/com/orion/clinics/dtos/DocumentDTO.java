@@ -1,9 +1,7 @@
 package com.orion.clinics.dtos;
 
-import com.orion.clinics.helpers.DocumentType;
+import com.orion.clinics.enums.DocumentType;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class DocumentDTO {
