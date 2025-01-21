@@ -12,13 +12,15 @@ public class DocumentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private DocumentType type;
 
     @Lob
+    @Column(name = "content", nullable = false)
     private byte[] content;
 
     @ManyToOne

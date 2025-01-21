@@ -13,11 +13,14 @@ public class ClinicRecordEntity {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "id", nullable = false)
         private Long id;
 
-        @Column(name = "status_name")
-        private String statusName;
+        @ManyToOne
+        @JoinColumn(name = "status_name")
+        private ClinicStatusEntity statusName;
 
+        @Column(name = "updated", nullable = false)
         private LocalDateTime updated;
 
         @ManyToOne

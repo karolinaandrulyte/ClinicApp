@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 public class CountryEntity {
 
     @Id
-    @Column(name = "iso_code")
+    @Column(name = "iso_code", nullable = false)
     private String isoCode;
 
+    @Column(name = "name", nullable = false)
     private String name;
 }

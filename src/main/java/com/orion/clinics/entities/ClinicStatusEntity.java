@@ -1,5 +1,6 @@
 package com.orion.clinics.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class ClinicStatusEntity {
 
     @Id
+    @Column(name = "status", nullable = false)
     private String status;
 }

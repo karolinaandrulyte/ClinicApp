@@ -13,17 +13,18 @@ public class ClinicEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "address", nullable = false)
     private String address;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private CityEntity city;
-
-    @ManyToOne
-    @JoinColumn(name = "status_name")  // Links to clinic_status table
-    private ClinicStatusEntity status;
 
     @ManyToMany
     @JoinTable(

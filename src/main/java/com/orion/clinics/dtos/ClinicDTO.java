@@ -10,7 +10,6 @@ public class ClinicDTO {
     private String name;
     private String address;
     private CityDTO city;
-    private ClinicStatusDTO status;
     private List<DocumentDTO> documents;
     private List<ClinicRecordDTO> records;
     private List<DoctorDTO> doctors;

@@ -12,6 +12,7 @@ import java.util.List;
 public class RecordStatusEntity {
 
     @Id
+    @Column(name = "status", nullable = false)
     private String status;
 
     @OneToMany(mappedBy = "status")

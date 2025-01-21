@@ -12,6 +12,7 @@ import java.util.List;
 public class SpecialtyEntity {
 
     @Id
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "specialties")

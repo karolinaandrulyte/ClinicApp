@@ -13,9 +13,13 @@ public class DoctorRecordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "updated", nullable = false)
     private LocalDateTime updated;
 
     @ManyToOne
