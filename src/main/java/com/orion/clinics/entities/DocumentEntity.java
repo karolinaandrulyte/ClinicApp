@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "documents")
+@Entity(name = "documents")
 public class DocumentEntity {
 
     @Id

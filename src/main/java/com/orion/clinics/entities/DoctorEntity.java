@@ -9,8 +9,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "doctors")
+@Entity(name = "doctors")
 public class DoctorEntity {
 
     @Id

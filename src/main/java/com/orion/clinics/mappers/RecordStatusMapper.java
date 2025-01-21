@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RecordStatusMapper {
-    RecordStatusDTO toDoctorStatusDTO(RecordStatusEntity doctorStatusEntity);
-    RecordStatusEntity toDoctorStatusEntity(RecordStatusDTO doctorStatusDTO);
+    RecordStatusDTO toRecordStatusDTO(RecordStatusEntity recordStatusEntity);
+    RecordStatusEntity toRecordStatusEntity(RecordStatusDTO recordStatusDTO);
 }
 

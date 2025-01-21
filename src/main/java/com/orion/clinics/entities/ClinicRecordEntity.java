@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "clinic_records")
+@Entity(name = "clinic_records")
 public class ClinicRecordEntity {
 
         @Id

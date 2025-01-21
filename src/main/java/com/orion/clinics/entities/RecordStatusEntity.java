@@ -8,8 +8,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "record_status")
+@Entity(name = "record_status")
 public class RecordStatusEntity {
 
     @Id
