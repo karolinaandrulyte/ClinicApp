@@ -1,9 +1,11 @@
 package com.orion.clinics.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -24,10 +26,16 @@ public class DoctorEntity {
     private String lastName;
 
     @Column(name = "date_of_birth", nullable = false)
-    private String dateOfBirth;
+    private Date dateOfBirth;
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @ManyToMany
     @JoinTable(

@@ -3,7 +3,11 @@ CREATE TABLE `doctors`(
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `date_of_birth` DATE NOT NULL,
-    `address` VARCHAR(255) NOT NULL
+    `address` VARCHAR(255) NOT NULL,
+    `phone_number` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `specialty_name` VARCHAR(255) NOT NULL,
+    `clinic_id` BIGINT UNSIGNED NOT NULL
 );
 CREATE TABLE `specialties`(
     `name` VARCHAR(255) NOT NULL PRIMARY KEY
