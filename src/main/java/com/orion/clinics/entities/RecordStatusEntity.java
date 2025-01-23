@@ -14,7 +14,4 @@ public class RecordStatusEntity {
     @Id
     @Column(name = "status", nullable = false)
     private String status;
-
-    @OneToMany(mappedBy = "status")
-    private List<DoctorRecordEntity> doctorRecords;
 }

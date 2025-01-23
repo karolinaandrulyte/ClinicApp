@@ -5,10 +5,12 @@ import com.orion.clinics.entities.SpecialtyEntity;
 import com.orion.clinics.mappers.SpecialtyMapper;
 import com.orion.clinics.repositories.SpecialtyRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class SpecialtyService {
 
     private final SpecialtyRepository specialtyRepository;

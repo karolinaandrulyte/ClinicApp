@@ -5,10 +5,12 @@ import com.orion.clinics.entities.CountryEntity;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CountryRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CountryService {
 
     private final CountryRepository countryRepository;

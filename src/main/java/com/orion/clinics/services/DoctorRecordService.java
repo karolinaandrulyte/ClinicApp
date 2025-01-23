@@ -5,10 +5,12 @@ import com.orion.clinics.entities.DoctorRecordEntity;
 import com.orion.clinics.mappers.DoctorRecordMapper;
 import com.orion.clinics.repositories.DoctorRecordRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class DoctorRecordService {
     private final DoctorRecordRepository doctorRecordRepository;
     private final DoctorRecordMapper doctorRecordMapper;
@@ -37,6 +39,16 @@ public class DoctorRecordService {
         DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDTO);
         DoctorRecordEntity savedDoctorRecord = doctorRecordRepository.save(doctorRecord);
         return doctorRecordMapper.toDoctorRecordDTO(savedDoctorRecord);
+    }
+
+    public DoctorRecordDTO update(DoctorRecordDTO doctorRecordDTO) {
+        Long id = doctorRecordDTO.getId();
+        if (!doctorRecordRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Doctor record not found with id: " + id);
+        }
+        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDTO);
+        DoctorRecordEntity updatedDoctorRecord = doctorRecordRepository.save(doctorRecord);
+        return doctorRecordMapper.toDoctorRecordDTO(updatedDoctorRecord);
     }
 
     public void deleteById(Long id) {

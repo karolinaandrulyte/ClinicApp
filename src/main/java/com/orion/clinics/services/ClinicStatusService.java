@@ -5,10 +5,12 @@ import com.orion.clinics.entities.ClinicStatusEntity;
 import com.orion.clinics.mappers.ClinicStatusMapper;
 import com.orion.clinics.repositories.ClinicStatusRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ClinicStatusService {
 
     private final ClinicStatusRepository clinicStatusRepository;

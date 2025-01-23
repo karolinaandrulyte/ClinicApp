@@ -19,7 +19,6 @@ CREATE TABLE `doctors_specialties`(
 );
 CREATE TABLE `doctor_records`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
     `status_name` VARCHAR(255) NOT NULL,
     `updated` DATETIME NOT NULL,
     `doctor_id` BIGINT UNSIGNED NOT NULL

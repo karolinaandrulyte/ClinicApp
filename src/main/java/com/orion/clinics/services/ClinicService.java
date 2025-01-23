@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ClinicService {
@@ -41,6 +40,25 @@ public class ClinicService {
         ClinicEntity clinic = clinicMapper.toClinicEntity(clinicDto);
         ClinicEntity savedClinic = clinicRepository.save(clinic);
         return clinicMapper.toClinicDTO(savedClinic);
+    }
+
+    public ClinicDTO updateClinic(ClinicDTO clinicDto) {
+        if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
+            throw new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId());
+        }
+        ClinicEntity existingClinic = clinicRepository.findById(clinicDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId()));
+        if (clinicDto.getName() != null) {
+            existingClinic.setName(clinicMapper.toClinicEntity(clinicDto).getName());
+        }
+        if (clinicDto.getAddress() != null) {
+            existingClinic.setAddress(clinicMapper.toClinicEntity(clinicDto).getAddress());
+        }
+        if (clinicDto.getCity() != null) {
+            existingClinic.setCity(clinicMapper.toClinicEntity(clinicDto).getCity());
+        }
+        ClinicEntity updatedClinic = clinicRepository.save(existingClinic);
+        return clinicMapper.toClinicDTO(updatedClinic);
     }
 
     public void deleteById(Long id) {

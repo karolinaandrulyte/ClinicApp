@@ -5,10 +5,12 @@ import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.mappers.DoctorMapper;
 import com.orion.clinics.repositories.DoctorRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class DoctorService {
 
     private final DoctorRepository doctorRepository;
@@ -38,6 +40,16 @@ public class DoctorService {
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDTO);
         DoctorEntity savedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorDTO(savedDoctor);
+    }
+
+    public DoctorDTO update(Long id, DoctorDTO doctorDTO) {
+        if (!doctorRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Doctor not found with id: " + id);
+        }
+        DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDTO);
+        doctor.setId(id);
+        DoctorEntity updatedDoctor = doctorRepository.save(doctor);
+        return doctorMapper.toDoctorDTO(updatedDoctor);
     }
 
     public void deleteById(Long id) {
