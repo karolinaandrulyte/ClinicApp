@@ -47,9 +47,11 @@ public class DoctorEntity {
     )
     private Set<SpecialtyEntity> specialties;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany
+    @JoinTable(
+            name = "doctors_clinics",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "clinic_id")
+    )
     private List<ClinicEntity> clinics;
-
-    @OneToMany(mappedBy = "doctor")
-    private List<DoctorRecordEntity> records;
 }

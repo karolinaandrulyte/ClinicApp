@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "specialties")
 public class SpecialtyEntity {
@@ -17,6 +16,7 @@ public class SpecialtyEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "specialties")
-    private List<DoctorEntity> doctors;
+    public SpecialtyEntity() {
+        this.name = "General Medicine";
+    }
 }

@@ -3,14 +3,17 @@ package com.orion.clinics.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DoctorDTO {
     private Long id;
     private String firstName;
@@ -29,5 +32,4 @@ public class DoctorDTO {
 
     private Set<SpecialtyDTO> specialties;
     private List<ClinicDTO> clinics;
-    private List<DoctorRecordDTO> records;
 }

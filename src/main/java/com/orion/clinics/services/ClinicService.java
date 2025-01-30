@@ -42,7 +42,7 @@ public class ClinicService {
         return clinicMapper.toClinicDTO(savedClinic);
     }
 
-    public ClinicDTO updateClinic(ClinicDTO clinicDto) {
+    public ClinicDTO updateClinic(Long id, ClinicDTO clinicDto) {
         if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
             throw new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId());
         }
