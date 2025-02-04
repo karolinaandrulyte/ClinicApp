@@ -1,7 +1,8 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.CityDTO;
+import com.orion.clinics.dtos.CityDto;
 import com.orion.clinics.entities.CityEntity;
+import com.orion.clinics.entities.CountryEntity;
 import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CityRepository;
@@ -17,45 +18,36 @@ public class CityService {
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
     private final CountryMapper countryMapper;
+    private final CountryService countryService;
 
-    public CityService(CityRepository cityRepository, CityMapper cityMapper, CountryMapper countryMapper) {
+    public CityService(CityRepository cityRepository, CityMapper cityMapper, CountryMapper countryMapper, CountryService countryService) {
         this.cityRepository = cityRepository;
         this.cityMapper = cityMapper;
         this.countryMapper = countryMapper;
+        this.countryService = countryService;
     }
 
-    public List<CityDTO> findAll() {
+    public CityDto save(CityDto cityDto) {
+        CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+
+        CityEntity cityEntity = cityMapper.toCityEntity(cityDto);
+        cityEntity.setCountry(country);
+
+        CityEntity savedCity = cityRepository.save(cityEntity);
+
+        return cityMapper.toCityDto(savedCity);
+    }
+
+    public List<CityDto> findAll() {
         List<CityEntity> cities = cityRepository.findAll();
         return cities.stream()
-                .map(cityMapper::toCityDTO)
+                .map(cityMapper::toCityDto)
                 .toList();
     }
 
-    public Optional<CityDTO> findById(Long id) {
-        if (!cityRepository.existsById(id)) {
-            throw new ResourceNotFoundException("City not found with id: " + id);
-        }
-        Optional<CityEntity> city = cityRepository.findById(id);
-        return city.map(cityMapper::toCityDTO);
-    }
-
-    public CityDTO save(CityDTO cityDTO) {
-        CityEntity city = cityMapper.toCityEntity(cityDTO);
-        CityEntity savedCity = cityRepository.save(city);
-        return cityMapper.toCityDTO(savedCity);
-    }
-
-    public CityDTO update(Long id, CityDTO cityDTO) {
-        CityEntity existingCity = cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
-        if (cityDTO.getName() != null) {
-            existingCity.setName(cityDTO.getName());
-        }
-        if (cityDTO.getCountry() != null) {
-            existingCity.setCountry(countryMapper.toCountryEntity(cityDTO.getCountry())); // Assuming a CountryMapper exists
-        }
-        CityEntity updatedCity = cityRepository.save(existingCity);
-        return cityMapper.toCityDTO(updatedCity);
+    public Optional<CityEntity> findById(Long id) {
+        return cityRepository.findById(id);
     }
 
     public void deleteById(Long id) {
@@ -63,5 +55,20 @@ public class CityService {
             throw new ResourceNotFoundException("City not found with id: " + id);
         }
         cityRepository.deleteById(id);
+    }
+
+    public CityDto update(Long id, CityDto cityDto) {
+        CityEntity cityEntity = cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
+
+        CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+
+        cityEntity.setName(cityDto.getName());
+        cityEntity.setCountry(country);
+
+        CityEntity updatedCity = cityRepository.save(cityEntity);
+
+        return cityMapper.toCityDto(updatedCity);
     }
 }

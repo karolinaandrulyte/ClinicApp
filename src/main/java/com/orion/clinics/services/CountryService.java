@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.CountryDTO;
+import com.orion.clinics.dtos.CountryDto;
 import com.orion.clinics.entities.CountryEntity;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CountryRepository;
@@ -21,23 +21,21 @@ public class CountryService {
         this.countryMapper = countryMapper;
     }
 
-    public List<CountryDTO> findAll() {
+    public List<CountryDto> findAll() {
         List<CountryEntity> countries = countryRepository.findAll();
         return countries.stream()
-                .map(countryMapper::toCountryDTO)
+                .map(countryMapper::toCountryDto)
                 .toList();
     }
 
-    public Optional<CountryDTO> findByIsoCode(String isoCode) {
-        CountryEntity country = countryRepository.findById(isoCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
-        return Optional.of(countryMapper.toCountryDTO(country));
+    public Optional<CountryEntity> findByIsoCode(String isoCode) {
+        return countryRepository.findById(isoCode);  // Return an Optional<CountryEntity>
     }
 
-    public CountryDTO save(CountryDTO countryDTO) {
-        CountryEntity country = countryMapper.toCountryEntity(countryDTO);
+    public CountryDto save(CountryDto countryDto) {
+        CountryEntity country = countryMapper.toCountryEntity(countryDto);
         CountryEntity savedCountry = countryRepository.save(country);
-        return countryMapper.toCountryDTO(savedCountry);
+        return countryMapper.toCountryDto(savedCountry);
     }
 
     public void deleteByIsoCode(String isoCode) {
@@ -46,12 +44,12 @@ public class CountryService {
         countryRepository.delete(country);
     }
 
-    public CountryDTO update(String isoCode, CountryDTO countryDTO) {
+    public CountryDto update(String isoCode, CountryDto countryDto) {
         CountryEntity country = countryRepository.findById(isoCode)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
-        country.setName(countryDTO.getName());
+        country.setName(countryDto.getName());
         CountryEntity updatedCountry = countryRepository.save(country);
-        return countryMapper.toCountryDTO(updatedCountry);
+        return countryMapper.toCountryDto(updatedCountry);
     }
 
 }

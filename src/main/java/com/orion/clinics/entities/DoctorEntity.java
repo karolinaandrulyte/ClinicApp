@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class DoctorEntity {
             joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_name")
     )
-    private Set<SpecialtyEntity> specialties;
+    private Set<SpecialtyEntity> specialties = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

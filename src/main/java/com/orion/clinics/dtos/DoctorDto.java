@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorDTO {
+public class DoctorDto {
     private Long id;
     private String firstName;
     private String lastName;
@@ -30,6 +30,6 @@ public class DoctorDTO {
     @Email(message = "The email format is incorrect. Follow: example@gmail.com")
     private String email;
 
-    private Set<SpecialtyDTO> specialties;
-    private List<ClinicDTO> clinics;
+    private Set<SpecialtyDto> specialties;
+    private List<ClinicDto> clinics;
 }

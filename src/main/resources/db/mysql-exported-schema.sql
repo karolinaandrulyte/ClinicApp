@@ -5,9 +5,7 @@ CREATE TABLE `doctors`(
     `date_of_birth` DATE NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `phone_number` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `specialty_name` VARCHAR(255) NOT NULL,
-    `clinic_id` BIGINT UNSIGNED NOT NULL
+    `email` VARCHAR(255) NOT NULL
 );
 CREATE TABLE `specialties`(
     `name` VARCHAR(255) NOT NULL PRIMARY KEY
@@ -67,15 +65,11 @@ ALTER TABLE
 ALTER TABLE
     `doctors_specialties` ADD CONSTRAINT FOREIGN KEY(`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
-    `doctors` ADD CONSTRAINT FOREIGN KEY(`id`) REFERENCES `doctors_clinics`(`doctor_id`);
-ALTER TABLE
     `doctor_records` ADD CONSTRAINT FOREIGN KEY (`status_name`) REFERENCES `record_status`(`status`);
 ALTER TABLE
     `doctor_records` ADD CONSTRAINT FOREIGN KEY (`doctor_id`) REFERENCES `doctors`(`id`);
 ALTER TABLE
     `clinics` ADD CONSTRAINT FOREIGN KEY(`city_id`) REFERENCES `cities`(`id`);
-ALTER TABLE
-    `record_status` ADD CONSTRAINT FOREIGN KEY(`status`) REFERENCES `doctor_records`(`status_name`);
 ALTER TABLE
     `cities` ADD CONSTRAINT FOREIGN KEY(`country_iso_code`) REFERENCES `countries`(`iso_code`);
 ALTER TABLE

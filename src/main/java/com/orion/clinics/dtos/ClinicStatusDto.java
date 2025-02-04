@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CountryDTO {
-    private String isoCode;
-    private String name;
+public class ClinicStatusDto {
+    private String status;
 }

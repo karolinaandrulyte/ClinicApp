@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.DocumentTypeDTO;
+import com.orion.clinics.dtos.DocumentTypeDto;
 import com.orion.clinics.entities.DocumentTypeEntity;
 import com.orion.clinics.mappers.DocumentTypeMapper;
 import com.orion.clinics.repositories.DocumentTypeRepository;
@@ -20,23 +20,23 @@ public class DocumentTypeService {
         this.documentTypeMapper = documentTypeMapper;
     }
 
-    public List<DocumentTypeDTO> findAll() {
+    public List<DocumentTypeDto> findAll() {
         List<DocumentTypeEntity> documentTypes = documentTypeRepository.findAll();
         return documentTypes.stream()
-                .map(documentTypeMapper::toDocumentTypeDTO)
+                .map(documentTypeMapper::toDocumentTypeDto)
                 .toList();
     }
 
-    public Optional<DocumentTypeDTO> findByType(String type) {
+    public Optional<DocumentTypeDto> findByType(String type) {
         DocumentTypeEntity documentType = documentTypeRepository.findByType(type)
                 .orElseThrow(() -> new ResourceNotFoundException("Document type not found with type: " + type));
-        return Optional.of(documentTypeMapper.toDocumentTypeDTO(documentType));
+        return Optional.of(documentTypeMapper.toDocumentTypeDto(documentType));
     }
 
-    public DocumentTypeDTO save(DocumentTypeDTO documentTypeDTO) {
-        DocumentTypeEntity documentType = documentTypeMapper.toDocumentTypeEntity(documentTypeDTO);
+    public DocumentTypeDto save(DocumentTypeDto documentTypeDto) {
+        DocumentTypeEntity documentType = documentTypeMapper.toDocumentTypeEntity(documentTypeDto);
         DocumentTypeEntity savedDocumentType = documentTypeRepository.save(documentType);
-        return documentTypeMapper.toDocumentTypeDTO(savedDocumentType);
+        return documentTypeMapper.toDocumentTypeDto(savedDocumentType);
     }
 
     public void deleteByType(String type) {
@@ -45,11 +45,11 @@ public class DocumentTypeService {
         documentTypeRepository.delete(documentType);
     }
 
-    public DocumentTypeDTO update(String type, DocumentTypeDTO documentTypeDTO) {
+    public DocumentTypeDto update(String type, DocumentTypeDto documentTypeDto) {
         DocumentTypeEntity existingDocumentType = documentTypeRepository.findById(type)
                 .orElseThrow(() -> new ResourceNotFoundException("Document type not found with type: " + type));
-        existingDocumentType.setType(documentTypeDTO.getType());
+        existingDocumentType.setType(documentTypeDto.getType());
         DocumentTypeEntity updatedDocumentType = documentTypeRepository.save(existingDocumentType);
-        return documentTypeMapper.toDocumentTypeDTO(updatedDocumentType);
+        return documentTypeMapper.toDocumentTypeDto(updatedDocumentType);
     }
 }

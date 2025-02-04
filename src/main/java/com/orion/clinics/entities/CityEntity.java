@@ -24,7 +24,4 @@ public class CityEntity {
     @ManyToOne
     @JoinColumn(name = "country_iso_code", referencedColumnName = "iso_code")
     private CountryEntity country;
-
-    @OneToMany(mappedBy = "city")
-    private List<ClinicEntity> clinics;
 }

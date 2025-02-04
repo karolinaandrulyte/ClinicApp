@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.ClinicDTO;
+import com.orion.clinics.dtos.ClinicDto;
 import com.orion.clinics.entities.*;
 import com.orion.clinics.mappers.ClinicMapper;
 import com.orion.clinics.repositories.ClinicRepository;
@@ -21,28 +21,28 @@ public class ClinicService {
         this.clinicMapper = clinicMapper;
     }
 
-    public List<ClinicDTO> findAll() {
+    public List<ClinicDto> findAll() {
         List<ClinicEntity> clinics = clinicRepository.findAll();
         return clinics.stream()
-                .map(clinicMapper::toClinicDTO)
+                .map(clinicMapper::toClinicDto)
                 .toList();
     }
 
-    public Optional<ClinicDTO> findById(Long id) {
+    public Optional<ClinicDto> findById(Long id) {
         if (!clinicRepository.existsById(id)) {
             throw new ResourceNotFoundException("Clinic record not found with id: " + id);
         }
         Optional<ClinicEntity> clinic = clinicRepository.findById(id);
-        return clinic.map(clinicMapper::toClinicDTO);
+        return clinic.map(clinicMapper::toClinicDto);
     }
 
-    public ClinicDTO saveClinic(ClinicDTO clinicDto) {
+    public ClinicDto saveClinic(ClinicDto clinicDto) {
         ClinicEntity clinic = clinicMapper.toClinicEntity(clinicDto);
         ClinicEntity savedClinic = clinicRepository.save(clinic);
-        return clinicMapper.toClinicDTO(savedClinic);
+        return clinicMapper.toClinicDto(savedClinic);
     }
 
-    public ClinicDTO updateClinic(Long id, ClinicDTO clinicDto) {
+    public ClinicDto updateClinic(Long id, ClinicDto clinicDto) {
         if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
             throw new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId());
         }
@@ -58,7 +58,7 @@ public class ClinicService {
             existingClinic.setCity(clinicMapper.toClinicEntity(clinicDto).getCity());
         }
         ClinicEntity updatedClinic = clinicRepository.save(existingClinic);
-        return clinicMapper.toClinicDTO(updatedClinic);
+        return clinicMapper.toClinicDto(updatedClinic);
     }
 
     public void deleteById(Long id) {

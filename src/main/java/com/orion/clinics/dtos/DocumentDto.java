@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DocumentDTO {
+public class DocumentDto {
     private Long id;
     private DocumentType type;
     private byte[] content;
-    private ClinicDTO clinic;
+    private ClinicDto clinic;
 }

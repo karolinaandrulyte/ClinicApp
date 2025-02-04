@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.SpecialtyDTO;
+import com.orion.clinics.dtos.SpecialtyDto;
 import com.orion.clinics.entities.SpecialtyEntity;
 import com.orion.clinics.mappers.SpecialtyMapper;
 import com.orion.clinics.repositories.SpecialtyRepository;
@@ -21,23 +21,23 @@ public class SpecialtyService {
         this.specialtyMapper = specialtyMapper;
     }
 
-    public List<SpecialtyDTO> findAll() {
+    public List<SpecialtyDto> findAll() {
         List<SpecialtyEntity> specialties = specialtyRepository.findAll();
         return specialties.stream()
-                .map(specialtyMapper::toSpecialtyDTO)
+                .map(specialtyMapper::toSpecialtyDto)
                 .toList();
     }
 
-    public Optional<SpecialtyDTO> findByName(String name) {
+    public Optional<SpecialtyDto> findByName(String name) {
         SpecialtyEntity specialty = specialtyRepository.findById(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
-        return Optional.of(specialtyMapper.toSpecialtyDTO(specialty));
+        return Optional.of(specialtyMapper.toSpecialtyDto(specialty));
     }
 
-    public SpecialtyDTO save(SpecialtyDTO specialtyDTO) {
-        SpecialtyEntity specialty = specialtyMapper.toSpecialtyEntity(specialtyDTO);
+    public SpecialtyDto save(SpecialtyDto specialtyDto) {
+        SpecialtyEntity specialty = specialtyMapper.toSpecialtyEntity(specialtyDto);
         SpecialtyEntity savedSpecialty = specialtyRepository.save(specialty);
-        return specialtyMapper.toSpecialtyDTO(savedSpecialty);
+        return specialtyMapper.toSpecialtyDto(savedSpecialty);
     }
 
     public void deleteByName(String name) {
@@ -46,11 +46,11 @@ public class SpecialtyService {
         specialtyRepository.delete(specialty);
     }
 
-    public SpecialtyDTO update(String name, SpecialtyDTO specialtyDTO) {
+    public SpecialtyDto update(String name, SpecialtyDto specialtyDto) {
         SpecialtyEntity existingSpecialty = specialtyRepository.findById(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
-        existingSpecialty.setName(specialtyDTO.getName());
+        existingSpecialty.setName(specialtyDto.getName());
         SpecialtyEntity updatedSpecialty = specialtyRepository.save(existingSpecialty);
-        return specialtyMapper.toSpecialtyDTO(updatedSpecialty);
+        return specialtyMapper.toSpecialtyDto(updatedSpecialty);
     }
 }

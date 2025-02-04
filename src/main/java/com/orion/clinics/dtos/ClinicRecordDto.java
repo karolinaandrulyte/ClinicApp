@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class ClinicRecordDTO {
+public class ClinicRecordDto {
     private Long id;
-    private ClinicStatusDTO statusName;
+    private ClinicStatusDto statusName;
     private LocalDateTime updated;
-    private ClinicDTO clinic;
+    private ClinicDto clinic;
 }

@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.RecordStatusDTO;
+import com.orion.clinics.dtos.RecordStatusDto;
 import com.orion.clinics.entities.RecordStatusEntity;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
@@ -20,23 +20,23 @@ public class RecordStatusService {
         this.recordStatusMapper = recordStatusMapper;
     }
 
-    public List<RecordStatusDTO> findAll() {
+    public List<RecordStatusDto> findAll() {
         List<RecordStatusEntity> recordStatuses = recordStatusRepository.findAll();
         return recordStatuses.stream()
-                .map(recordStatusMapper::toRecordStatusDTO)
+                .map(recordStatusMapper::toRecordStatusDto)
                 .toList();
     }
 
-    public Optional<RecordStatusDTO> findByStatus(String status) {
+    public Optional<RecordStatusDto> findByStatus(String status) {
         RecordStatusEntity recordStatus = recordStatusRepository.findById(status)
                 .orElseThrow(() -> new ResourceNotFoundException("Record status not found with status: " + status));
-        return Optional.of(recordStatusMapper.toRecordStatusDTO(recordStatus));
+        return Optional.of(recordStatusMapper.toRecordStatusDto(recordStatus));
     }
 
-    public RecordStatusDTO save(RecordStatusDTO recordStatusDTO) {
-        RecordStatusEntity recordStatus = recordStatusMapper.toRecordStatusEntity(recordStatusDTO);
+    public RecordStatusDto save(RecordStatusDto recordStatusDto) {
+        RecordStatusEntity recordStatus = recordStatusMapper.toRecordStatusEntity(recordStatusDto);
         RecordStatusEntity savedRecordStatus = recordStatusRepository.save(recordStatus);
-        return recordStatusMapper.toRecordStatusDTO(savedRecordStatus);
+        return recordStatusMapper.toRecordStatusDto(savedRecordStatus);
     }
 
     public void deleteByStatus(String status) {
@@ -45,11 +45,11 @@ public class RecordStatusService {
         recordStatusRepository.delete(recordStatus);
     }
 
-    public RecordStatusDTO update(String status, RecordStatusDTO recordStatusDTO) {
+    public RecordStatusDto update(String status, RecordStatusDto recordStatusDto) {
         RecordStatusEntity existingRecordStatus = recordStatusRepository.findById(status)
                 .orElseThrow(() -> new ResourceNotFoundException("Record status not found with status: " + status));
-        existingRecordStatus.setStatus(recordStatusDTO.getStatus());
+        existingRecordStatus.setStatus(recordStatusDto.getStatus());
         RecordStatusEntity updatedRecordStatus = recordStatusRepository.save(existingRecordStatus);
-        return recordStatusMapper.toRecordStatusDTO(updatedRecordStatus);
+        return recordStatusMapper.toRecordStatusDto(updatedRecordStatus);
     }
 }

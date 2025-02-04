@@ -9,10 +9,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClinicDTO {
+public class ClinicDto {
     private Long id;
     private String name;
     private String address;
-    private CityDTO city;
-    private List<ClinicRecordDTO> records;
+    private CityDto city;
+    private List<ClinicRecordDto> records;
 }

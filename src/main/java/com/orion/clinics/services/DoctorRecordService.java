@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.DoctorRecordDTO;
+import com.orion.clinics.dtos.DoctorRecordDto;
 import com.orion.clinics.entities.DoctorRecordEntity;
 import com.orion.clinics.mappers.DoctorRecordMapper;
 import com.orion.clinics.repositories.DoctorRecordRepository;
@@ -20,35 +20,35 @@ public class DoctorRecordService {
         this.doctorRecordMapper = doctorRecordMapper;
     }
 
-    public List<DoctorRecordDTO> findAll() {
+    public List<DoctorRecordDto> findAll() {
         List<DoctorRecordEntity> doctorRecords = doctorRecordRepository.findAll();
         return doctorRecords.stream()
-                .map(doctorRecordMapper::toDoctorRecordDTO)
+                .map(doctorRecordMapper::toDoctorRecordDto)
                 .toList();
     }
 
-    public Optional<DoctorRecordDTO> findById(Long id) {
+    public Optional<DoctorRecordDto> findById(Long id) {
         if (!doctorRecordRepository.existsById(id)) {
             throw new ResourceNotFoundException("Doctor record not found with id: " + id);
         }
         Optional<DoctorRecordEntity> doctorRecord = doctorRecordRepository.findById(id);
-        return doctorRecord.map(doctorRecordMapper::toDoctorRecordDTO);
+        return doctorRecord.map(doctorRecordMapper::toDoctorRecordDto);
     }
 
-    public DoctorRecordDTO save(DoctorRecordDTO doctorRecordDTO) {
-        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDTO);
+    public DoctorRecordDto save(DoctorRecordDto doctorRecordDto) {
+        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDto);
         DoctorRecordEntity savedDoctorRecord = doctorRecordRepository.save(doctorRecord);
-        return doctorRecordMapper.toDoctorRecordDTO(savedDoctorRecord);
+        return doctorRecordMapper.toDoctorRecordDto(savedDoctorRecord);
     }
 
-    public DoctorRecordDTO update(DoctorRecordDTO doctorRecordDTO) {
-        Long id = doctorRecordDTO.getId();
+    public DoctorRecordDto update(DoctorRecordDto doctorRecordDto) {
+        Long id = doctorRecordDto.getId();
         if (!doctorRecordRepository.existsById(id)) {
             throw new ResourceNotFoundException("Doctor record not found with id: " + id);
         }
-        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDTO);
+        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDto);
         DoctorRecordEntity updatedDoctorRecord = doctorRecordRepository.save(doctorRecord);
-        return doctorRecordMapper.toDoctorRecordDTO(updatedDoctorRecord);
+        return doctorRecordMapper.toDoctorRecordDto(updatedDoctorRecord);
     }
 
     public void deleteById(Long id) {

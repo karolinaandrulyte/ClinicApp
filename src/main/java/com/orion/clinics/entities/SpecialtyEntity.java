@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "specialties")
 public class SpecialtyEntity {
 
@@ -16,7 +19,6 @@ public class SpecialtyEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public SpecialtyEntity() {
-        this.name = "General Medicine";
-    }
+    @ManyToMany(mappedBy = "specialties")
+    private Set<DoctorEntity> doctors = new HashSet<>();
 }

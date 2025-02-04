@@ -1,6 +1,6 @@
 package com.orion.clinics.services;
 
-import com.orion.clinics.dtos.DocumentDTO;
+import com.orion.clinics.dtos.DocumentDto;
 import com.orion.clinics.entities.DocumentEntity;
 import com.orion.clinics.mappers.DocumentMapper;
 import com.orion.clinics.repositories.DocumentRepository;
@@ -21,35 +21,35 @@ public class DocumentService {
         this.documentMapper = documentMapper;
     }
 
-    public List<DocumentDTO> findAll() {
+    public List<DocumentDto> findAll() {
         List<DocumentEntity> documents = documentRepository.findAll();
         return documents.stream()
-                .map(documentMapper::toDocumentDTO)
+                .map(documentMapper::toDocumentDto)
                 .toList();
     }
 
-    public Optional<DocumentDTO> findById(Long id) {
+    public Optional<DocumentDto> findById(Long id) {
         if (!documentRepository.existsById(id)) {
             throw new ResourceNotFoundException("Document not found with id: " + id);
         }
         Optional<DocumentEntity> document = documentRepository.findById(id);
-        return document.map(documentMapper::toDocumentDTO);
+        return document.map(documentMapper::toDocumentDto);
     }
 
-    public DocumentDTO save(DocumentDTO documentDTO) {
-        DocumentEntity document = documentMapper.toDocumentEntity(documentDTO);
+    public DocumentDto save(DocumentDto documentDto) {
+        DocumentEntity document = documentMapper.toDocumentEntity(documentDto);
         DocumentEntity savedDocument = documentRepository.save(document);
-        return documentMapper.toDocumentDTO(savedDocument);
+        return documentMapper.toDocumentDto(savedDocument);
     }
 
-    public DocumentDTO update(Long id, DocumentDTO documentDTO) {
+    public DocumentDto update(Long id, DocumentDto documentDto) {
         if (!documentRepository.existsById(id)) {
             throw new ResourceNotFoundException("Document not found with id: " + id);
         }
-        DocumentEntity document = documentMapper.toDocumentEntity(documentDTO);
+        DocumentEntity document = documentMapper.toDocumentEntity(documentDto);
         document.setId(id);
         DocumentEntity updatedDocument = documentRepository.save(document);
-        return documentMapper.toDocumentDTO(updatedDocument);
+        return documentMapper.toDocumentDto(updatedDocument);
     }
 
     public void deleteById(Long id) {

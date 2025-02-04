@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ClinicStatusDTO {
+public class RecordStatusDto {
     private String status;
 }

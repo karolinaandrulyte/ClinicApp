@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DocumentTypeDTO {
-    private String type;
+public class SpecialtyDto {
+    private String name;
 }
