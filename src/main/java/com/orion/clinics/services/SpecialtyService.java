@@ -8,7 +8,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SpecialtyService {
@@ -21,6 +20,12 @@ public class SpecialtyService {
         this.specialtyMapper = specialtyMapper;
     }
 
+    public SpecialtyDto save(SpecialtyDto specialtyDto) {
+        SpecialtyEntity specialty = specialtyMapper.toSpecialtyEntity(specialtyDto);
+        SpecialtyEntity savedSpecialty = specialtyRepository.save(specialty);
+        return specialtyMapper.toSpecialtyDto(savedSpecialty);
+    }
+
     public List<SpecialtyDto> findAll() {
         List<SpecialtyEntity> specialties = specialtyRepository.findAll();
         return specialties.stream()
@@ -28,29 +33,13 @@ public class SpecialtyService {
                 .toList();
     }
 
-    public Optional<SpecialtyDto> findByName(String name) {
-        SpecialtyEntity specialty = specialtyRepository.findById(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
-        return Optional.of(specialtyMapper.toSpecialtyDto(specialty));
-    }
-
-    public SpecialtyDto save(SpecialtyDto specialtyDto) {
-        SpecialtyEntity specialty = specialtyMapper.toSpecialtyEntity(specialtyDto);
-        SpecialtyEntity savedSpecialty = specialtyRepository.save(specialty);
-        return specialtyMapper.toSpecialtyDto(savedSpecialty);
+    public boolean existsByName(String name) {
+        return specialtyRepository.existsById(name);
     }
 
     public void deleteByName(String name) {
         SpecialtyEntity specialty = specialtyRepository.findById(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
         specialtyRepository.delete(specialty);
-    }
-
-    public SpecialtyDto update(String name, SpecialtyDto specialtyDto) {
-        SpecialtyEntity existingSpecialty = specialtyRepository.findById(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
-        existingSpecialty.setName(specialtyDto.getName());
-        SpecialtyEntity updatedSpecialty = specialtyRepository.save(existingSpecialty);
-        return specialtyMapper.toSpecialtyDto(updatedSpecialty);
     }
 }

@@ -21,6 +21,12 @@ public class ClinicStatusService {
         this.clinicStatusMapper = clinicStatusMapper;
     }
 
+    public ClinicStatusDto save(ClinicStatusDto clinicStatusDto) {
+        ClinicStatusEntity clinicStatus = clinicStatusMapper.toClinicStatusEntity(clinicStatusDto);
+        ClinicStatusEntity savedClinicStatus = clinicStatusRepository.save(clinicStatus);
+        return clinicStatusMapper.toClinicStatusDto(savedClinicStatus);
+    }
+
     public List<ClinicStatusDto> findAll() {
         List<ClinicStatusEntity> clinicStatuses = clinicStatusRepository.findAll();
         return clinicStatuses.stream()
@@ -28,16 +34,8 @@ public class ClinicStatusService {
                 .toList();
     }
 
-    public Optional<ClinicStatusDto> findByStatus(String status) {
-        ClinicStatusEntity clinicStatus = clinicStatusRepository.findByStatus(status)
-                .orElseThrow(() -> new ResourceNotFoundException("Clinic status not found with status: " + status));
-        return Optional.of(clinicStatusMapper.toClinicStatusDto(clinicStatus));
-    }
-
-    public ClinicStatusDto save(ClinicStatusDto clinicStatusDto) {
-        ClinicStatusEntity clinicStatus = clinicStatusMapper.toClinicStatusEntity(clinicStatusDto);
-        ClinicStatusEntity savedClinicStatus = clinicStatusRepository.save(clinicStatus);
-        return clinicStatusMapper.toClinicStatusDto(savedClinicStatus);
+    public boolean existsByStatus(String status) {
+        return clinicStatusRepository.existsByStatus(status);
     }
 
     public void deleteByStatus(String status) {
@@ -46,12 +44,4 @@ public class ClinicStatusService {
         clinicStatusRepository.delete(clinicStatus);
     }
 
-    public ClinicStatusDto update(String status, ClinicStatusDto clinicStatusDto) {
-        ClinicStatusEntity existingClinicStatus = clinicStatusRepository.findByStatus(status)
-                .orElseThrow(() -> new ResourceNotFoundException("Clinic status not found with status: " + status));
-        existingClinicStatus.setStatus(clinicStatusDto.getStatus());
-
-        ClinicStatusEntity updatedClinicStatus = clinicStatusRepository.save(existingClinicStatus);
-        return clinicStatusMapper.toClinicStatusDto(updatedClinicStatus);
-    }
 }

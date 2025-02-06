@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ClinicStatusRepository extends JpaRepository<ClinicStatusEntity, Long> {
+public interface ClinicStatusRepository extends JpaRepository<ClinicStatusEntity, String> {
     Optional<ClinicStatusEntity> findByStatus(String status);
+    boolean existsByStatus(String status);
 }

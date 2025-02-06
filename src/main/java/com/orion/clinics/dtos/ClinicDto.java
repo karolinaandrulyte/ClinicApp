@@ -13,6 +13,5 @@ public class ClinicDto {
     private Long id;
     private String name;
     private String address;
-    private CityDto city;
-    private List<ClinicRecordDto> records;
+    private Long cityId;
 }

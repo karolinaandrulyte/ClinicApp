@@ -27,9 +27,4 @@ public class ClinicEntity {
     @ManyToOne
     @JoinColumn(name = "city_id")
     private CityEntity city;
-
-    @OneToMany(mappedBy = "clinic")
-    private List<ClinicRecordEntity> records;
 }
-
-

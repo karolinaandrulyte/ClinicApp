@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ClinicRecordDto {
     private Long id;
-    private ClinicStatusDto statusName;
+    private String statusName;
     private LocalDateTime updated;
-    private ClinicDto clinic;
+    private Long clinicId;
 }

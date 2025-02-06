@@ -18,7 +18,4 @@ public class SpecialtyEntity {
     @Id
     @Column(name = "name", nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "specialties")
-    private Set<DoctorEntity> doctors = new HashSet<>();
 }

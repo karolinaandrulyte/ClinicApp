@@ -20,7 +20,7 @@ public class ClinicRecordEntity {
 
         @ManyToOne
         @JoinColumn(name = "status_name")
-        private ClinicStatusEntity statusName;
+        private ClinicStatusEntity status;
 
         @Column(name = "updated", nullable = false)
         private LocalDateTime updated;

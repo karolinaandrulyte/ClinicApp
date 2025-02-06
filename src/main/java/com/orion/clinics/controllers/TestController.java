@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -32,15 +33,24 @@ public class TestController {
         return new CityDto(null, "DummyCity", "LV");
     }
 
-//    @GetMapping("/clinic-dummy")
-//    public ClinicDto getDummyClinic() {
-//        CityDto dummyCity = new CityDto(4L,null, null, null, null);
-//        return new ClinicDto(null, "Dummy Clinic", "1234 Dummy St", dummyCity, null);
-//    }
-
     @GetMapping("/specialty-dummy")
     public SpecialtyDto getDummySpecialty() {
         return new SpecialtyDto("dummy specialist");
+    }
+
+    @GetMapping("/clinicStatus-dummy")
+    public ClinicStatusDto getDummyClinicStatus() {
+        return new ClinicStatusDto("dummy status");
+    }
+
+    @GetMapping("/recordStatus-dummy")
+    public RecordStatusDto getDummyRecordStatus() {
+        return new RecordStatusDto("dummy status");
+    }
+
+    @GetMapping("/clinic-dummy")
+    public ClinicDto getDummyClinic() {
+        return new ClinicDto(null, "Dummy Clinic", "1234 Clinic St", 5L);
     }
 
     @GetMapping("/doctor-dummy")
@@ -49,11 +59,24 @@ public class TestController {
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant());
         Set<SpecialtyDto> specialties = Set.of(
-                new SpecialtyDto("therapist"),
-                new SpecialtyDto("general practicioner"));
+                new SpecialtyDto("cardiology"),
+                new SpecialtyDto("neurology"));
         List<ClinicDto> clinics = List.of(
-                new ClinicDto(3L, null, null, null, null),
-                new ClinicDto(4L, null, null, null, null));
+                new ClinicDto(),
+                new ClinicDto()
+        );
+
         return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics);
     }
+
+    @GetMapping("/doctorRecord-dummy")
+    public DoctorRecordDto getDummyDoctorRecord() {
+        DoctorRecordDto doctorRecordDto = new DoctorRecordDto();
+        doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
+        doctorRecordDto.setStatus("employed");  // status is now a String
+        doctorRecordDto.setDoctorId(14L);
+
+        return doctorRecordDto;
+    }
+
 }

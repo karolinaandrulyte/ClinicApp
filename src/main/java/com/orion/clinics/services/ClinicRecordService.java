@@ -49,12 +49,12 @@ public class ClinicRecordService {
         ClinicRecordEntity existingClinicRecord = clinicRecordRepository.findById(clinicRecordDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Clinic record not found with id: " + clinicRecordDto.getId()));
         if (clinicRecordDto.getStatusName() != null) {
-            existingClinicRecord.setStatusName(clinicRecordMapper.toClinicRecordEntity(clinicRecordDto).getStatusName());
+            existingClinicRecord.setStatus(clinicRecordMapper.toClinicRecordEntity(clinicRecordDto).getStatus());
         }
         if (clinicRecordDto.getUpdated() != null) {
             existingClinicRecord.setUpdated(clinicRecordDto.getUpdated());
         }
-        if (clinicRecordDto.getClinic() != null) {
+        if (clinicRecordDto.getClinicId() != null) {
             existingClinicRecord.setClinic(clinicRecordMapper.toClinicRecordEntity(clinicRecordDto).getClinic());
         }
         ClinicRecordEntity updatedClinicRecord = clinicRecordRepository.save(existingClinicRecord);

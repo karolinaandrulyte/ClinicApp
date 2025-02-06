@@ -21,6 +21,12 @@ public class ClinicService {
         this.clinicMapper = clinicMapper;
     }
 
+    public ClinicDto saveClinic(ClinicDto clinicDto) {
+        ClinicEntity clinic = clinicMapper.toClinicEntity(clinicDto);
+        ClinicEntity savedClinic = clinicRepository.save(clinic);
+        return clinicMapper.toClinicDto(savedClinic);
+    }
+
     public List<ClinicDto> findAll() {
         List<ClinicEntity> clinics = clinicRepository.findAll();
         return clinics.stream()
@@ -36,12 +42,6 @@ public class ClinicService {
         return clinic.map(clinicMapper::toClinicDto);
     }
 
-    public ClinicDto saveClinic(ClinicDto clinicDto) {
-        ClinicEntity clinic = clinicMapper.toClinicEntity(clinicDto);
-        ClinicEntity savedClinic = clinicRepository.save(clinic);
-        return clinicMapper.toClinicDto(savedClinic);
-    }
-
     public ClinicDto updateClinic(Long id, ClinicDto clinicDto) {
         if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
             throw new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId());
@@ -54,7 +54,7 @@ public class ClinicService {
         if (clinicDto.getAddress() != null) {
             existingClinic.setAddress(clinicMapper.toClinicEntity(clinicDto).getAddress());
         }
-        if (clinicDto.getCity() != null) {
+        if (clinicDto.getCityId() != null) {
             existingClinic.setCity(clinicMapper.toClinicEntity(clinicDto).getCity());
         }
         ClinicEntity updatedClinic = clinicRepository.save(existingClinic);
