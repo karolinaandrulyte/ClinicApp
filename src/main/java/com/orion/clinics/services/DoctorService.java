@@ -3,6 +3,7 @@ package com.orion.clinics.services;
 import com.orion.clinics.dtos.DoctorDto;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.SpecialtyEntity;
+import com.orion.clinics.exception.MissingSpecialtyException;
 import com.orion.clinics.mappers.DoctorMapper;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.SpecialtyRepository;
@@ -31,7 +32,7 @@ public class DoctorService {
     @Transactional
     public DoctorDto save(DoctorDto doctorDto) {
         if (doctorDto.getSpecialties() == null || doctorDto.getSpecialties().isEmpty()) {
-            throw new IllegalArgumentException("Doctor must have at least one specialty.");
+            throw new MissingSpecialtyException("At least one specialty is required.");
         }
 
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);

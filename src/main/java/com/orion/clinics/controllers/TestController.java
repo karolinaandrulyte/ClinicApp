@@ -79,4 +79,14 @@ public class TestController {
         return doctorRecordDto;
     }
 
+    @GetMapping("/clinicRecord-dummy")
+    public ClinicRecordDto getDummyClinicRecord() {
+        ClinicRecordDto clinicRecordDto = new ClinicRecordDto();
+        clinicRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
+        clinicRecordDto.setStatusName("open");
+        clinicRecordDto.setClinicId(6L);
+
+        return clinicRecordDto;
+    }
+
 }

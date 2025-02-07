@@ -4,12 +4,12 @@ import com.orion.clinics.dtos.CountryDto;
 import com.orion.clinics.entities.CountryEntity;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.services.CountryService;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/countries")
@@ -36,12 +36,14 @@ public class CountryController {
 
     @GetMapping("/{isoCode}")
     public ResponseEntity<CountryDto> getCountryByIsoCode(@PathVariable String isoCode) {
-        CountryEntity countryEntity = countryService.findByIsoCode(isoCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
+        Optional<CountryEntity> countryEntityOptional = countryService.findByIsoCode(isoCode);
 
-        CountryDto countryDto = countryMapper.toCountryDto(countryEntity);
+        if (countryEntityOptional.isPresent()) {
+            CountryDto countryDto = countryMapper.toCountryDto(countryEntityOptional.get());
+            return new ResponseEntity<>(countryDto, HttpStatus.OK);
+        }
 
-        return new ResponseEntity<>(countryDto, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{isoCode}")

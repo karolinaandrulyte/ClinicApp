@@ -4,12 +4,12 @@ import com.orion.clinics.dtos.CityDto;
 import com.orion.clinics.entities.CityEntity;
 import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.services.CityService;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cities")
@@ -36,12 +36,14 @@ public class CityController {
     
     @GetMapping("/{id}")
     public ResponseEntity<CityDto> getCityById(@PathVariable Long id) {
-        CityEntity cityEntity = cityService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
-        
-        CityDto cityDto = cityMapper.toCityDto(cityEntity);
-        
-        return new ResponseEntity<>(cityDto, HttpStatus.OK);
+        Optional<CityEntity> cityEntityOptional = cityService.findById(id);
+
+        if (cityEntityOptional.isPresent()) {
+            CityDto cityDto = cityMapper.toCityDto(cityEntityOptional.get());
+            return new ResponseEntity<>(cityDto, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{id}")

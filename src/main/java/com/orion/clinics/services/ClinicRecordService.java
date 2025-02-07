@@ -21,6 +21,12 @@ public class ClinicRecordService {
         this.clinicRecordMapper = clinicRecordMapper;
     }
 
+    public ClinicRecordDto save(ClinicRecordDto clinicRecordDto) {
+        ClinicRecordEntity clinicRecord = clinicRecordMapper.toClinicRecordEntity(clinicRecordDto);
+        ClinicRecordEntity savedClinicRecord = clinicRecordRepository.save(clinicRecord);
+        return clinicRecordMapper.toClinicRecordDto(savedClinicRecord);
+    }
+
     public List<ClinicRecordDto> findAll() {
         List<ClinicRecordEntity> clinicRecords = clinicRecordRepository.findAll();
         return clinicRecords.stream()
@@ -36,10 +42,11 @@ public class ClinicRecordService {
         return clinicRecord.map(clinicRecordMapper::toClinicRecordDto);
     }
 
-    public ClinicRecordDto save(ClinicRecordDto clinicRecordDto) {
-        ClinicRecordEntity clinicRecord = clinicRecordMapper.toClinicRecordEntity(clinicRecordDto);
-        ClinicRecordEntity savedClinicRecord = clinicRecordRepository.save(clinicRecord);
-        return clinicRecordMapper.toClinicRecordDto(savedClinicRecord);
+    public List<ClinicRecordDto> findByClinicId(Long clinicId) {
+        List<ClinicRecordEntity> clinicRecords = clinicRecordRepository.findByClinicId(clinicId);
+        return clinicRecords.stream()
+                .map(clinicRecordMapper::toClinicRecordDto)
+                .toList();
     }
 
     public ClinicRecordDto update(ClinicRecordDto clinicRecordDto) {

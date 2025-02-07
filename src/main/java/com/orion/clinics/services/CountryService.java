@@ -21,6 +21,15 @@ public class CountryService {
         this.countryMapper = countryMapper;
     }
 
+    public CountryDto save(CountryDto countryDto) {
+        if (countryRepository.existsById(countryDto.getIsoCode())) {
+            throw new IllegalArgumentException("Country with ISO code " + countryDto.getIsoCode() + " already exists.");
+        }
+        CountryEntity country = countryMapper.toCountryEntity(countryDto);
+        CountryEntity savedCountry = countryRepository.save(country);
+        return countryMapper.toCountryDto(savedCountry);
+    }
+
     public List<CountryDto> findAll() {
         List<CountryEntity> countries = countryRepository.findAll();
         return countries.stream()
@@ -29,19 +38,7 @@ public class CountryService {
     }
 
     public Optional<CountryEntity> findByIsoCode(String isoCode) {
-        return countryRepository.findById(isoCode);  // Return an Optional<CountryEntity>
-    }
-
-    public CountryDto save(CountryDto countryDto) {
-        CountryEntity country = countryMapper.toCountryEntity(countryDto);
-        CountryEntity savedCountry = countryRepository.save(country);
-        return countryMapper.toCountryDto(savedCountry);
-    }
-
-    public void deleteByIsoCode(String isoCode) {
-        CountryEntity country = countryRepository.findById(isoCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
-        countryRepository.delete(country);
+        return countryRepository.findById(isoCode);
     }
 
     public CountryDto update(String isoCode, CountryDto countryDto) {
@@ -50,6 +47,12 @@ public class CountryService {
         country.setName(countryDto.getName());
         CountryEntity updatedCountry = countryRepository.save(country);
         return countryMapper.toCountryDto(updatedCountry);
+    }
+
+    public void deleteByIsoCode(String isoCode) {
+        CountryEntity country = countryRepository.findById(isoCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
+        countryRepository.delete(country);
     }
 
 }

@@ -50,13 +50,6 @@ public class CityService {
         return cityRepository.findById(id);
     }
 
-    public void deleteById(Long id) {
-        if (!cityRepository.existsById(id)) {
-            throw new ResourceNotFoundException("City not found with id: " + id);
-        }
-        cityRepository.deleteById(id);
-    }
-
     public CityDto update(Long id, CityDto cityDto) {
         CityEntity cityEntity = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
@@ -70,5 +63,12 @@ public class CityService {
         CityEntity updatedCity = cityRepository.save(cityEntity);
 
         return cityMapper.toCityDto(updatedCity);
+    }
+
+    public void deleteById(Long id) {
+        if (!cityRepository.existsById(id)) {
+            throw new ResourceNotFoundException("City not found with id: " + id);
+        }
+        cityRepository.deleteById(id);
     }
 }
