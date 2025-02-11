@@ -2,9 +2,10 @@ package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.ClinicDto;
 import com.orion.clinics.entities.*;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.ClinicMapper;
 import com.orion.clinics.repositories.ClinicRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class ClinicService {
 
     public Optional<ClinicDto> findById(Long id) {
         if (!clinicRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Clinic record not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic record not found with id: " + id);
         }
         Optional<ClinicEntity> clinic = clinicRepository.findById(id);
         return clinic.map(clinicMapper::toClinicDto);
@@ -44,10 +45,10 @@ public class ClinicService {
 
     public ClinicDto updateClinic(Long id, ClinicDto clinicDto) {
         if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
-            throw new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId());
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicDto.getId());
         }
         ClinicEntity existingClinic = clinicRepository.findById(clinicDto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Clinic not found with id: " + clinicDto.getId()));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicDto.getId()));
         if (clinicDto.getName() != null) {
             existingClinic.setName(clinicMapper.toClinicEntity(clinicDto).getName());
         }
@@ -63,7 +64,7 @@ public class ClinicService {
 
     public void deleteById(Long id) {
         if (!clinicRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Clinic not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + id);
         }
         clinicRepository.deleteById(id);
     }

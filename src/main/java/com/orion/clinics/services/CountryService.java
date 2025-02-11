@@ -2,9 +2,10 @@ package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.CountryDto;
 import com.orion.clinics.entities.CountryEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CountryRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CountryService {
 
     public CountryDto save(CountryDto countryDto) {
         if (countryRepository.existsById(countryDto.getIsoCode())) {
-            throw new IllegalArgumentException("Country with ISO code " + countryDto.getIsoCode() + " already exists.");
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Country with ISO code " + countryDto.getIsoCode() + " already exists.");
         }
         CountryEntity country = countryMapper.toCountryEntity(countryDto);
         CountryEntity savedCountry = countryRepository.save(country);
@@ -43,7 +44,7 @@ public class CountryService {
 
     public CountryDto update(String isoCode, CountryDto countryDto) {
         CountryEntity country = countryRepository.findById(isoCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + isoCode));
         country.setName(countryDto.getName());
         CountryEntity updatedCountry = countryRepository.save(country);
         return countryMapper.toCountryDto(updatedCountry);
@@ -51,7 +52,7 @@ public class CountryService {
 
     public void deleteByIsoCode(String isoCode) {
         CountryEntity country = countryRepository.findById(isoCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + isoCode));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + isoCode));
         countryRepository.delete(country);
     }
 

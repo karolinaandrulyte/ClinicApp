@@ -1,7 +1,9 @@
 package com.orion.clinics.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String resource, String fieldName, Object fieldValue) {
-        super(String.format("%s not found with %s : '%s'", resource, fieldName, fieldValue));
+import com.orion.clinics.enums.ClinicsAppErrors;
+//Keeping it is better for readability and allows catching specific exceptions
+public class ResourceNotFoundException extends ApiException {
+    public ResourceNotFoundException(String details) {
+        super(ClinicsAppErrors.ENTITY_NOT_FOUND, details);
     }
 }

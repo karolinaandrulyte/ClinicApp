@@ -2,13 +2,14 @@ package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.RecordStatusDto;
 import com.orion.clinics.entities.RecordStatusEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RecordStatusService {
@@ -40,7 +41,7 @@ public class RecordStatusService {
 
     public void deleteByStatus(String status) {
         RecordStatusEntity recordStatus = recordStatusRepository.findByStatus(status)
-                .orElseThrow(() -> new ResourceNotFoundException("Record status not found with status: " + status));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Record status not found with status: " + status));
         recordStatusRepository.delete(recordStatus);
     }
 

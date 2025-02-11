@@ -2,9 +2,10 @@ package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.SpecialtyDto;
 import com.orion.clinics.entities.SpecialtyEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.SpecialtyMapper;
 import com.orion.clinics.repositories.SpecialtyRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class SpecialtyService {
 
     public void deleteByName(String name) {
         SpecialtyEntity specialty = specialtyRepository.findById(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Specialty not found with name: " + name));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found with name: " + name));
         specialtyRepository.delete(specialty);
     }
 }

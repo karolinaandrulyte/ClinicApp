@@ -89,4 +89,19 @@ public class TestController {
         return clinicRecordDto;
     }
 
+//    @GetMapping("/document-dummy")
+//    public DocumentDto getDummyDocument() {
+//        return new DocumentDto(
+//                1L,
+//                DocumentType.CONSENT_FORM,
+//                new byte[]{1, 2, 3},
+//                new ClinicDto(1L, "Dummy Clinic", "Dummy Address")
+//        );
+//    }
+
+//    @GetMapping("/document-type-dummy")
+//    public DocumentTypeDto getDummyDocumentType() {
+//        return new DocumentTypeDto("CONSENT_FORM");
+//    }
+
 }

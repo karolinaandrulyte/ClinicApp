@@ -3,10 +3,11 @@ package com.orion.clinics.services;
 import com.orion.clinics.dtos.CityDto;
 import com.orion.clinics.entities.CityEntity;
 import com.orion.clinics.entities.CountryEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CityRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class CityService {
 
     public CityDto save(CityDto cityDto) {
         CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + cityDto.getCountryIsoCode()));
 
         CityEntity cityEntity = cityMapper.toCityEntity(cityDto);
         cityEntity.setCountry(country);
@@ -52,10 +53,10 @@ public class CityService {
 
     public CityDto update(Long id, CityDto cityDto) {
         CityEntity cityEntity = cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id));
 
         CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + cityDto.getCountryIsoCode()));
 
         cityEntity.setName(cityDto.getName());
         cityEntity.setCountry(country);
@@ -67,7 +68,7 @@ public class CityService {
 
     public void deleteById(Long id) {
         if (!cityRepository.existsById(id)) {
-            throw new ResourceNotFoundException("City not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id);
         }
         cityRepository.deleteById(id);
     }

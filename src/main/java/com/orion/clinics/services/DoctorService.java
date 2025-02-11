@@ -3,11 +3,11 @@ package com.orion.clinics.services;
 import com.orion.clinics.dtos.DoctorDto;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.SpecialtyEntity;
-import com.orion.clinics.exception.MissingSpecialtyException;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DoctorMapper;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.SpecialtyRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
@@ -32,14 +32,14 @@ public class DoctorService {
     @Transactional
     public DoctorDto save(DoctorDto doctorDto) {
         if (doctorDto.getSpecialties() == null || doctorDto.getSpecialties().isEmpty()) {
-            throw new MissingSpecialtyException("At least one specialty is required.");
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "At least one specialty is required.");
         }
 
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
 
         Set<SpecialtyEntity> existingSpecialties = doctorDto.getSpecialties().stream()
                 .map(specialtyDto -> specialtyRepository.findByName(specialtyDto.getName())
-                        .orElseThrow(() -> new ResourceNotFoundException("Specialty not found: " + specialtyDto.getName())))
+                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found: " + specialtyDto.getName(), specialtyDto.getName())))
                 .collect(Collectors.toSet());
 
         doctor.getSpecialties().clear();
@@ -57,26 +57,24 @@ public class DoctorService {
     }
 
     public Optional<DoctorDto> findById(Long id) {
-        if (!doctorRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor not found with id: " + id);
-        }
-        Optional<DoctorEntity> doctor = doctorRepository.findById(id);
-        return doctor.map(doctorMapper::toDoctorDto);
+        return doctorRepository.findById(id)
+                .map(doctorMapper::toDoctorDto);
     }
 
     public DoctorDto update(Long id, DoctorDto doctorDto) {
-        if (!doctorRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor not found with id: " + id);
-        }
+        DoctorEntity existingDoctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor with ID " + id + " not found"));
+
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
-        doctor.setId(id);
+        doctor.setId(existingDoctor.getId());
+
         DoctorEntity updatedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorDto(updatedDoctor);
     }
 
     public void deleteById(Long id) {
         if (!doctorRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor with ID " + id + " not found");
         }
         doctorRepository.deleteById(id);
     }

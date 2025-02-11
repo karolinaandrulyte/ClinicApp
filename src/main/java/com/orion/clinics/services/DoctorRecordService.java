@@ -4,12 +4,12 @@ import com.orion.clinics.dtos.DoctorRecordDto;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.DoctorRecordEntity;
 import com.orion.clinics.entities.RecordStatusEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DoctorRecordMapper;
-import com.orion.clinics.repositories.ClinicStatusRepository;
 import com.orion.clinics.repositories.DoctorRecordRepository;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.RecordStatusRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +32,9 @@ public class DoctorRecordService {
 
     public DoctorRecordDto save(DoctorRecordDto doctorRecordDto) {
         RecordStatusEntity status = recordStatusRepository.findByStatus(doctorRecordDto.getStatus())
-                .orElseThrow(() -> new ResourceNotFoundException("Status not found: " + doctorRecordDto.getStatus()));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Status not found: " + doctorRecordDto.getStatus()));
         DoctorEntity doctor = doctorRepository.findById(doctorRecordDto.getDoctorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found: " + doctorRecordDto.getDoctorId()));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found: " + doctorRecordDto.getDoctorId()));
 
         DoctorRecordEntity doctorRecord = new DoctorRecordEntity();
         doctorRecord.setUpdated(doctorRecordDto.getUpdated());
@@ -56,7 +56,7 @@ public class DoctorRecordService {
 
     public Optional<DoctorRecordDto> findById(Long id) {
         if (!doctorRecordRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor record not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor record not found with id: " + id);
         }
         Optional<DoctorRecordEntity> doctorRecord = doctorRecordRepository.findById(id);
         return doctorRecord.map(doctorRecordMapper::toDoctorRecordDto);
@@ -73,7 +73,7 @@ public class DoctorRecordService {
     public DoctorRecordDto update(DoctorRecordDto doctorRecordDto) {
         Long id = doctorRecordDto.getId();
         if (!doctorRecordRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor record not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor record not found with id: " + id);
         }
         DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDto);
         DoctorRecordEntity updatedDoctorRecord = doctorRecordRepository.save(doctorRecord);
@@ -82,7 +82,7 @@ public class DoctorRecordService {
 
     public void deleteById(Long id) {
         if (!doctorRecordRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor record not found with id: " + id);
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor record not found with id: " + id);
         }
         doctorRecordRepository.deleteById(id);
     }

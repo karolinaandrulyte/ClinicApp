@@ -2,13 +2,13 @@ package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.ClinicStatusDto;
 import com.orion.clinics.entities.ClinicStatusEntity;
+import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.ClinicStatusMapper;
 import com.orion.clinics.repositories.ClinicStatusRepository;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClinicStatusService {
@@ -40,7 +40,7 @@ public class ClinicStatusService {
 
     public void deleteByStatus(String status) {
         ClinicStatusEntity clinicStatus = clinicStatusRepository.findByStatus(status)
-                .orElseThrow(() -> new ResourceNotFoundException("Clinic status not found with status: " + status));
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic status not found with status: " + status));
         clinicStatusRepository.delete(clinicStatus);
     }
 
