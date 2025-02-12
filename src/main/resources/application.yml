@@ -5,33 +5,33 @@ spring:
     url: jdbc:mysql://localhost:3306/clinics?createDatabaseIfNotExist=true&useSSL=false
     username: root
     password: Labaisunkus1
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver #remove when sec works
   jpa:
     hibernate:
       ddl-auto: none # Disable Hibernate's schema management
     show-sql: true
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          keycloak:
-#            client-id: ${OAUTH2_CLIENT_ID:backend_client}
-#            client-secret: ${OAUTH2_CLIENT_SECRET:xkVPF7uByBIFKElC5bM8OXJCoaoUiRPG}
-#            authorization-grant-type: client_credentials
-#            scope: openid, profile, email
-#        provider:
-#          keycloak:
-#            token-uri: ${KEYCLOAK_URL}realms/${KEYCLOAK_REALM}/protocol/openid-connect/token
-#      resourceserver:
-#        jwt:
-#          jwk-set-uri: http://10.1.11.26:8282/realms/auth/protocol/openid-connect/certs
-#    devtools:
-#      restart:false
-#    auth:
-#      token:
-#        secret: ${AUTH_TOKEN_SECRET:mySuperSecretKeyDontShare}
-#        expiry-hours: ${AUTH_TOKEN_EXPIRY_HOURS:2}
-#        encrypt-secret: ${AUTH_TOKEN_ENCRYPT_SECRET:myEncryptionPassphrase}
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${OAUTH2_CLIENT_ID:backend_client}
+            client-secret: ${OAUTH2_CLIENT_SECRET:xkVPF7uByBIFKElC5bM8OXJCoaoUiRPG}
+            authorization-grant-type: client_credentials
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            token-uri: ${KEYCLOAK_URL}realms/${KEYCLOAK_REALM}/protocol/openid-connect/token
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://10.1.11.26:8282/realms/auth/protocol/openid-connect/certs
+    devtools:
+      restart:false
+    auth:
+      token:
+        secret: ${AUTH_TOKEN_SECRET:mySuperSecretKeyDontShare}
+        expiry-hours: ${AUTH_TOKEN_EXPIRY_HOURS:2}
+        encrypt-secret: ${AUTH_TOKEN_ENCRYPT_SECRET:myEncryptionPassphrase}
   liquibase:
     change-log: db/database-changelog.yaml
     enabled: true

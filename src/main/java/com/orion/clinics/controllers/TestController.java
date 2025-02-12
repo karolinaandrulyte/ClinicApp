@@ -23,17 +23,17 @@ public class TestController {
         this.cityMapper = cityMapper;
     }
 
-    @GetMapping("/country-dummy")
+    @GetMapping("/countries-dummy")
     public CountryDto getDummyCountry() {
         return new CountryDto("DUM", "DummyCountry");
     }
 
-    @GetMapping("/city-dummy")
+    @GetMapping("/cities-dummy")
     public CityDto getDummyCity() {
         return new CityDto(null, "DummyCity", "LV");
     }
 
-    @GetMapping("/specialty-dummy")
+    @GetMapping("/specialties-dummy")
     public SpecialtyDto getDummySpecialty() {
         return new SpecialtyDto("dummy specialist");
     }
@@ -48,12 +48,12 @@ public class TestController {
         return new RecordStatusDto("dummy status");
     }
 
-    @GetMapping("/clinic-dummy")
+    @GetMapping("/clinics-dummy")
     public ClinicDto getDummyClinic() {
         return new ClinicDto(null, "Dummy Clinic", "1234 Clinic St", 5L);
     }
 
-    @GetMapping("/doctor-dummy")
+    @GetMapping("/doctors-dummy")
     public DoctorDto getDummyDoctor() {
         Date dateOfBirth = Date.from(LocalDate.of(1990, 1, 1)
                 .atStartOfDay(ZoneId.systemDefault())
@@ -69,7 +69,7 @@ public class TestController {
         return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics);
     }
 
-    @GetMapping("/doctorRecord-dummy")
+    @GetMapping("/doctorRecords-dummy")
     public DoctorRecordDto getDummyDoctorRecord() {
         DoctorRecordDto doctorRecordDto = new DoctorRecordDto();
         doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
@@ -79,7 +79,7 @@ public class TestController {
         return doctorRecordDto;
     }
 
-    @GetMapping("/clinicRecord-dummy")
+    @GetMapping("/clinicRecords-dummy")
     public ClinicRecordDto getDummyClinicRecord() {
         ClinicRecordDto clinicRecordDto = new ClinicRecordDto();
         clinicRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
@@ -89,7 +89,7 @@ public class TestController {
         return clinicRecordDto;
     }
 
-//    @GetMapping("/document-dummy")
+//    @GetMapping("/documents-dummy")
 //    public DocumentDto getDummyDocument() {
 //        return new DocumentDto(
 //                1L,
@@ -99,7 +99,7 @@ public class TestController {
 //        );
 //    }
 
-//    @GetMapping("/document-type-dummy")
+//    @GetMapping("/documentTypes-dummy")
 //    public DocumentTypeDto getDummyDocumentType() {
 //        return new DocumentTypeDto("CONSENT_FORM");
 //    }
