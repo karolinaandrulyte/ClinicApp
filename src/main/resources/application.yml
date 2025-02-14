@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://localhost:3306/clinics?createDatabaseIfNotExist=true&useSSL=false
     username: root
     password: Labaisunkus1
-    driver-class-name: com.mysql.cj.jdbc.Driver #remove when sec works
+#    driver-class-name: com.mysql.cj.jdbc.Driver #remove when sec works
   jpa:
     hibernate:
       ddl-auto: none # Disable Hibernate's schema management

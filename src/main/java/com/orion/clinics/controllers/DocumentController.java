@@ -28,12 +28,6 @@ public class DocumentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDocument);
     }
 
-    @PostMapping("/types/")
-    public ResponseEntity<DocumentTypeDto> saveDocumentType(@RequestBody DocumentTypeDto documentTypeDto) {
-        DocumentTypeDto savedDocumentType = documentTypeService.save(documentTypeDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDocumentType);
-    }
-
     @GetMapping
     public ResponseEntity<List<DocumentDto>> getAllDocuments() {
         return ResponseEntity.ok(documentService.findAll());
@@ -66,12 +60,6 @@ public class DocumentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDocument(@PathVariable Long id) {
         documentService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/types/{type}")
-    public ResponseEntity<Void> deleteDocumentType(@PathVariable String type) {
-        documentTypeService.deleteByType(type);
         return ResponseEntity.noContent().build();
     }
 

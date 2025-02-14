@@ -1,8 +1,7 @@
 package com.orion.clinics.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.orion.clinics.enums.DocumentType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class DocumentTypeEntity {
 
     @Id
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private DocumentType type;
 }

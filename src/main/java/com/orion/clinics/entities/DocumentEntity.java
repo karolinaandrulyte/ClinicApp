@@ -17,7 +17,6 @@ public class DocumentEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private DocumentType type;
 

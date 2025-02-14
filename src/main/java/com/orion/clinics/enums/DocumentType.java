@@ -10,5 +10,5 @@ public enum DocumentType {
     PAYMENT_RECEIPT("Payment Receipt"),
     EMPLOYEE_RECORD("Employee Record");
 
-    String description;
+    final String description;
 }
