@@ -14,6 +14,9 @@ public class DocumentTypeEntity {
 
     @Id
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, unique = true)
     private DocumentType type;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 }

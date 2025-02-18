@@ -47,8 +47,8 @@ public class DocumentController {
     }
 
     @GetMapping("/clinic/{clinicId}")
-    public ResponseEntity<List<DocumentDto>> getDocumentsByClinicId(@PathVariable Long id) {
-        List<DocumentDto> documents = documentService.findDocumentsByClinicId(id);
+    public ResponseEntity<List<DocumentDto>> getDocumentsByClinicId(@PathVariable Long clinicId) {
+        List<DocumentDto> documents = documentService.findDocumentsByClinicId(clinicId);
         return ResponseEntity.ok(documents);
     }
 

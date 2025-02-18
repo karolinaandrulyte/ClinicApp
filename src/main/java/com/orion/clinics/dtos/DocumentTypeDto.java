@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class DocumentTypeDto {
     private String type;
+    private String description;
 }

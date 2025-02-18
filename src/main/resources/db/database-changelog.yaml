@@ -5,3 +5,9 @@ databaseChangeLog:
       sqlFile:
         path: mysql-exported-schema.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2024-02-18-add_document-types.sql
+        relativeToChangelogFile: true

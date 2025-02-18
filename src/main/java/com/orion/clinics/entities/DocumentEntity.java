@@ -1,6 +1,5 @@
 package com.orion.clinics.entities;
 
-import com.orion.clinics.enums.DocumentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +16,9 @@ public class DocumentEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "type", nullable = false)
-    private DocumentType type;
+    @ManyToOne
+    @JoinColumn(name = "type", referencedColumnName = "type", nullable = false)
+    private DocumentTypeEntity type;
 
     @Lob
     @Column(name = "content", nullable = false)
@@ -28,4 +28,3 @@ public class DocumentEntity {
     @JoinColumn(name = "clinic_id")
     private ClinicEntity clinic;
 }
-

@@ -1,7 +1,6 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.*;
-import com.orion.clinics.enums.DocumentType;
 import com.orion.clinics.mappers.CityMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +12,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import static com.orion.clinics.enums.DocumentType.CONSENT_FORM;
 
 @RestController
 @RequestMapping("/test")
@@ -93,8 +94,8 @@ public class TestController {
     @GetMapping("/documents-dummy")
     public DocumentDto getDummyDocument() {
         return new DocumentDto(
-                1L,
-                "CONSENT_FORM",
+                null,
+                CONSENT_FORM,
                 new byte[]{1, 2, 3},
                 1L
         );
@@ -102,7 +103,7 @@ public class TestController {
 
     @GetMapping("/documentTypes-dummy")
     public DocumentTypeDto getDummyDocumentType() {
-        return new DocumentTypeDto("CONSENT_FORM");
+        return new DocumentTypeDto("CONSENT_FORM", "Consent Form");
     }
 
 }

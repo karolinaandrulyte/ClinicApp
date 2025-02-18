@@ -8,7 +8,8 @@ public enum DocumentType {
     PRESCRIPTION("Prescription"),
     LAB_REPORT("Lab Report"),
     PAYMENT_RECEIPT("Payment Receipt"),
-    EMPLOYEE_RECORD("Employee Record");
+    EMPLOYEE_RECORD("Employee Record"),
+    OTHER("Other");
 
     final String description;
 }

@@ -1,5 +1,6 @@
 package com.orion.clinics.dtos;
 
+import com.orion.clinics.enums.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class DocumentDto {
     private Long id;
-    private String type;
+    private DocumentType type;
     private byte[] content;
     private Long clinicId;
 }
