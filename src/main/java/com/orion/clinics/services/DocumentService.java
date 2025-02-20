@@ -9,7 +9,6 @@ import com.orion.clinics.repositories.DocumentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DocumentService {
@@ -35,12 +34,10 @@ public class DocumentService {
                 .toList();
     }
 
-    public Optional<DocumentDto> findById(Long id) {
-        if (!documentRepository.existsById(id)) {
-            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Document not found with id: " + id);
-        }
-        Optional<DocumentEntity> document = documentRepository.findById(id);
-        return document.map(documentMapper::toDocumentDto);
+    public DocumentDto findById(Long id) {
+        DocumentEntity document = documentRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Document not found with id: " + id));
+        return documentMapper.toDocumentDto(document);
     }
 
     public List<DocumentDto> findDocumentsByClinicId(Long clinicId) {

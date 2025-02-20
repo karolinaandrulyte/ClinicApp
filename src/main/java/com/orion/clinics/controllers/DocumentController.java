@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/documents")
@@ -40,10 +39,8 @@ public class DocumentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DocumentDto> getDocumentById(@PathVariable Long id) {
-        Optional<DocumentDto> document = documentService.findById(id);
-        return document
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        DocumentDto document = documentService.findById(id);
+        return ResponseEntity.ok(document);
     }
 
     @GetMapping("/clinic/{clinicId}")

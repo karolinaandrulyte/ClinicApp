@@ -1,26 +1,21 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.CityDto;
-import com.orion.clinics.entities.CityEntity;
-import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.services.CityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cities")
 public class CityController {
 
     private final CityService cityService;
-    private final CityMapper cityMapper;
 
-    public CityController(CityService cityService, CityMapper cityMapper) {
+    public CityController(CityService cityService) {
         this.cityService = cityService;
-        this.cityMapper = cityMapper;
     }
 
     @PostMapping("/")
@@ -33,17 +28,11 @@ public class CityController {
     public ResponseEntity<List<CityDto>> getAllCities() {
         return ResponseEntity.ok(cityService.findAll());
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<CityDto> getCityById(@PathVariable Long id) {
-        Optional<CityEntity> cityEntityOptional = cityService.findById(id);
-
-        if (cityEntityOptional.isPresent()) {
-            CityDto cityDto = cityMapper.toCityDto(cityEntityOptional.get());
-            return new ResponseEntity<>(cityDto, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        CityDto cityDto = cityService.findById(id);
+        return ResponseEntity.ok(cityDto);
     }
 
     @PatchMapping("/{id}")

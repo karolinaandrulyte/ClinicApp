@@ -9,7 +9,6 @@ import com.orion.clinics.repositories.CountryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CountryService {
@@ -38,8 +37,11 @@ public class CountryService {
                 .toList();
     }
 
-    public Optional<CountryEntity> findByIsoCode(String isoCode) {
-        return countryRepository.findById(isoCode);
+    public CountryDto findByIsoCode(String isoCode) {
+        CountryEntity countryEntity = countryRepository.findById(isoCode)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + isoCode));
+
+        return countryMapper.toCountryDto(countryEntity);
     }
 
     public CountryDto update(String isoCode, CountryDto countryDto) {

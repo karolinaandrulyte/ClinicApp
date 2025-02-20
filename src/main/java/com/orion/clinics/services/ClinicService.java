@@ -35,12 +35,10 @@ public class ClinicService {
                 .toList();
     }
 
-    public Optional<ClinicDto> findById(Long id) {
-        if (!clinicRepository.existsById(id)) {
-            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic record not found with id: " + id);
-        }
-        Optional<ClinicEntity> clinic = clinicRepository.findById(id);
-        return clinic.map(clinicMapper::toClinicDto);
+    public ClinicDto findById(Long id) {
+        ClinicEntity clinic = clinicRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + id));
+        return clinicMapper.toClinicDto(clinic);
     }
 
     public ClinicDto updateClinic(Long id, ClinicDto clinicDto) {

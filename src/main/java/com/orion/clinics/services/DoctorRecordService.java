@@ -54,12 +54,10 @@ public class DoctorRecordService {
                 .toList();
     }
 
-    public Optional<DoctorRecordDto> findById(Long id) {
-        if (!doctorRecordRepository.existsById(id)) {
-            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor record not found with id: " + id);
-        }
-        Optional<DoctorRecordEntity> doctorRecord = doctorRecordRepository.findById(id);
-        return doctorRecord.map(doctorRecordMapper::toDoctorRecordDto);
+    public DoctorRecordDto findById(Long id) {
+        DoctorRecordEntity doctorRecord = doctorRecordRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor record not found with id: " + id));
+        return doctorRecordMapper.toDoctorRecordDto(doctorRecord);
     }
 
     public List<DoctorRecordDto> getAllRecordsByDoctorId(Long doctorId) {

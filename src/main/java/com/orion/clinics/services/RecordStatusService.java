@@ -6,7 +6,6 @@ import com.orion.clinics.enums.ClinicsAppErrors;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

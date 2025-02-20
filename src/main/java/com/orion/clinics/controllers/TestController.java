@@ -1,7 +1,6 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.*;
-import com.orion.clinics.mappers.CityMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,12 +17,6 @@ import static com.orion.clinics.enums.DocumentType.CONSENT_FORM;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-
-    private CityMapper cityMapper;
-
-    public TestController(CityMapper cityMapper) {
-        this.cityMapper = cityMapper;
-    }
 
     @GetMapping("/countries-dummy")
     public CountryDto getDummyCountry() {
@@ -67,7 +60,6 @@ public class TestController {
                 new ClinicDto(),
                 new ClinicDto()
         );
-
         return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics);
     }
 
@@ -77,7 +69,6 @@ public class TestController {
         doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
         doctorRecordDto.setStatus("employed");  // status is now a String
         doctorRecordDto.setDoctorId(14L);
-
         return doctorRecordDto;
     }
 
@@ -87,7 +78,6 @@ public class TestController {
         clinicRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
         clinicRecordDto.setStatusName("open");
         clinicRecordDto.setClinicId(6L);
-
         return clinicRecordDto;
     }
 

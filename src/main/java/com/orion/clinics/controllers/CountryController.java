@@ -1,26 +1,21 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.CountryDto;
-import com.orion.clinics.entities.CountryEntity;
-import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.services.CountryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/countries")
 public class CountryController {
 
     private final CountryService countryService;
-    private final CountryMapper countryMapper;
 
-    public CountryController(CountryService countryService, CountryMapper countryMapper) {
+    public CountryController(CountryService countryService) {
         this.countryService = countryService;
-        this.countryMapper = countryMapper;
     }
 
     @PostMapping("/")
@@ -36,14 +31,8 @@ public class CountryController {
 
     @GetMapping("/{isoCode}")
     public ResponseEntity<CountryDto> getCountryByIsoCode(@PathVariable String isoCode) {
-        Optional<CountryEntity> countryEntityOptional = countryService.findByIsoCode(isoCode);
-
-        if (countryEntityOptional.isPresent()) {
-            CountryDto countryDto = countryMapper.toCountryDto(countryEntityOptional.get());
-            return new ResponseEntity<>(countryDto, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        CountryDto countryDto = countryService.findByIsoCode(isoCode);
+        return ResponseEntity.ok(countryDto);
     }
 
     @PatchMapping("/{isoCode}")

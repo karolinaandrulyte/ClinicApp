@@ -56,9 +56,10 @@ public class DoctorService {
                 .toList();
     }
 
-    public Optional<DoctorDto> findById(Long id) {
-        return doctorRepository.findById(id)
-                .map(doctorMapper::toDoctorDto);
+    public DoctorDto findById(Long id) {
+        DoctorEntity doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found with id: " + id));
+        return doctorMapper.toDoctorDto(doctor);
     }
 
     public DoctorDto update(Long id, DoctorDto doctorDto) {

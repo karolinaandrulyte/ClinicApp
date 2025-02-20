@@ -2,7 +2,6 @@ package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.ClinicDto;
 import com.orion.clinics.dtos.ClinicRecordDto;
-import com.orion.clinics.services.CityService;
 import com.orion.clinics.services.ClinicRecordService;
 import com.orion.clinics.services.ClinicService;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clinics")
@@ -43,10 +41,8 @@ public class ClinicController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClinicDto> getClinicById(@PathVariable Long id) {
-        Optional<ClinicDto> clinic = clinicService.findById(id);
-        return clinic
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        ClinicDto clinic = clinicService.findById(id);
+        return ResponseEntity.ok(clinic);
     }
 
     @GetMapping("/{id}/records")

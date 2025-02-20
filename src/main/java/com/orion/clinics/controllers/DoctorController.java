@@ -42,10 +42,8 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Long id) {
-        Optional<DoctorDto> doctor = doctorService.findById(id);
-        return doctor
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        DoctorDto doctor = doctorService.findById(id);
+        return ResponseEntity.ok(doctor);
     }
 
     @GetMapping("/{doctorId}/records")

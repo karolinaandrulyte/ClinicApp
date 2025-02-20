@@ -1,6 +1,7 @@
 package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.CityDto;
+import com.orion.clinics.dtos.CountryDto;
 import com.orion.clinics.entities.CityEntity;
 import com.orion.clinics.entities.CountryEntity;
 import com.orion.clinics.enums.ClinicsAppErrors;
@@ -11,7 +12,6 @@ import com.orion.clinics.repositories.CityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CityService {
@@ -29,8 +29,8 @@ public class CityService {
     }
 
     public CityDto save(CityDto cityDto) {
-        CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
-                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+        CountryDto countryDto = countryService.findByIsoCode(cityDto.getCountryIsoCode());
+        CountryEntity country = countryMapper.toCountryEntity(countryDto);
 
         CityEntity cityEntity = cityMapper.toCityEntity(cityDto);
         cityEntity.setCountry(country);
@@ -40,6 +40,7 @@ public class CityService {
         return cityMapper.toCityDto(savedCity);
     }
 
+
     public List<CityDto> findAll() {
         List<CityEntity> cities = cityRepository.findAll();
         return cities.stream()
@@ -47,19 +48,21 @@ public class CityService {
                 .toList();
     }
 
-    public Optional<CityEntity> findById(Long id) {
-        return cityRepository.findById(id);
+    public CityDto findById(Long id) {
+        CityEntity cityEntity = cityRepository.findById(id)
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id));
+
+        return cityMapper.toCityDto(cityEntity);
     }
 
     public CityDto update(Long id, CityDto cityDto) {
         CityEntity cityEntity = cityRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id));
 
-        CountryEntity country = countryService.findByIsoCode(cityDto.getCountryIsoCode())
-                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Country not found with ISO code: " + cityDto.getCountryIsoCode()));
+        CountryDto countryDto = countryService.findByIsoCode(cityDto.getCountryIsoCode());
 
         cityEntity.setName(cityDto.getName());
-        cityEntity.setCountry(country);
+        cityEntity.setCountry(countryMapper.toCountryEntity(countryDto));
 
         CityEntity updatedCity = cityRepository.save(cityEntity);
 
