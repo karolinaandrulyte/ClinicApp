@@ -35,3 +35,12 @@ spring:
   liquibase:
     change-log: db/database-changelog.yaml
     enabled: true
+  kafka:
+    bootstrap-servers: 10.1.11.34:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: app-group

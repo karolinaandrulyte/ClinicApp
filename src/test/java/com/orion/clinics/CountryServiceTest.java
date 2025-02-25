@@ -6,7 +6,6 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CountryRepository;
 import com.orion.clinics.services.CountryService;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -117,7 +116,7 @@ public class CountryServiceTest {
 
     @Test
     void shouldThrowException_WhenIsoCodeDoesNotExist() {
-        when(countryRepository.findById("XX")).thenThrow(new EntityNotFoundException("Country not found with ISO code: XX"));
+        when(countryRepository.findById("XX")).thenReturn(Optional.empty());
 
         ApiException exception = assertThrows(ApiException.class, () -> countryService.findByIsoCode("XX"));
         assertEquals("Country not found with ISO code: XX", exception.getMessage());
