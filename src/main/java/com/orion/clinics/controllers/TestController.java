@@ -67,7 +67,7 @@ public class TestController {
     public DoctorRecordDto getDummyDoctorRecord() {
         DoctorRecordDto doctorRecordDto = new DoctorRecordDto();
         doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
-        doctorRecordDto.setStatus("employed");  // status is now a String
+        doctorRecordDto.setStatus("employed");
         doctorRecordDto.setDoctorId(14L);
         return doctorRecordDto;
     }

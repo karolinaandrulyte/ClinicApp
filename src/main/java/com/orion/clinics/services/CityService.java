@@ -30,8 +30,12 @@ public class CityService {
 
     public CityDto save(CityDto cityDto) {
         CountryDto countryDto = countryService.findByIsoCode(cityDto.getCountryIsoCode());
-        CountryEntity country = countryMapper.toCountryEntity(countryDto);
+        if (countryDto == null) {
+            throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND,
+                    "Country with ISO code " + cityDto.getCountryIsoCode() + " does not exist.");
+        }
 
+        CountryEntity country = countryMapper.toCountryEntity(countryDto);
         CityEntity cityEntity = cityMapper.toCityEntity(cityDto);
         cityEntity.setCountry(country);
 
@@ -39,7 +43,6 @@ public class CityService {
 
         return cityMapper.toCityDto(savedCity);
     }
-
 
     public List<CityDto> findAll() {
         List<CityEntity> cities = cityRepository.findAll();

@@ -22,6 +22,9 @@ public class SpecialtyService {
     }
 
     public SpecialtyDto save(SpecialtyDto specialtyDto) {
+        if(specialtyRepository.existsById(specialtyDto.getName())) {
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Specialty with name " + specialtyDto.getName() + " already exists.");
+        }
         SpecialtyEntity specialty = specialtyMapper.toSpecialtyEntity(specialtyDto);
         SpecialtyEntity savedSpecialty = specialtyRepository.save(specialty);
         return specialtyMapper.toSpecialtyDto(savedSpecialty);

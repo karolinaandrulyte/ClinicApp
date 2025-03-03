@@ -22,6 +22,9 @@ public class ClinicStatusService {
     }
 
     public ClinicStatusDto save(ClinicStatusDto clinicStatusDto) {
+        if (clinicStatusRepository.existsByStatus(clinicStatusDto.getStatus())) {
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Clinic status already exists: " + clinicStatusDto.getStatus());
+        }
         ClinicStatusEntity clinicStatus = clinicStatusMapper.toClinicStatusEntity(clinicStatusDto);
         ClinicStatusEntity savedClinicStatus = clinicStatusRepository.save(clinicStatus);
         return clinicStatusMapper.toClinicStatusDto(savedClinicStatus);
