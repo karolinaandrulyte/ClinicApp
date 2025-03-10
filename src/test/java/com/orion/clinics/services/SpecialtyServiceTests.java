@@ -1,11 +1,10 @@
-package com.orion.clinics;
+package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.SpecialtyDto;
 import com.orion.clinics.entities.SpecialtyEntity;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.SpecialtyMapper;
 import com.orion.clinics.repositories.SpecialtyRepository;
-import com.orion.clinics.services.SpecialtyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

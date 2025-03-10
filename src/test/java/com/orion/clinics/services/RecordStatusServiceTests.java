@@ -1,11 +1,10 @@
-package com.orion.clinics;
+package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.RecordStatusDto;
 import com.orion.clinics.entities.RecordStatusEntity;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
-import com.orion.clinics.services.RecordStatusService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

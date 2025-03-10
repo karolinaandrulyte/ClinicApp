@@ -1,4 +1,4 @@
-package com.orion.clinics;
+package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.DoctorRecordDto;
 import com.orion.clinics.entities.DoctorEntity;
@@ -9,7 +9,6 @@ import com.orion.clinics.mappers.DoctorRecordMapper;
 import com.orion.clinics.repositories.DoctorRecordRepository;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.RecordStatusRepository;
-import com.orion.clinics.services.DoctorRecordService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -113,33 +113,36 @@ public class DoctorRecordServiceTests {
         assertTrue(exception.getMessage().contains("Doctor record not found"));
     }
 
-//    @Test
-//    void shouldUpdateDoctorRecord_whenValidDtoProvided() {
-//        RecordStatusEntity statusEntity = new RecordStatusEntity("ACTIVE");
-//        DoctorEntity doctorEntity = new DoctorEntity();
-//        doctorEntity.setId(1L);
-//
-//        DoctorRecordEntity existingRecord = new DoctorRecordEntity();
-//        existingRecord.setId(1L);
-//        existingRecord.setUpdated(LocalDateTime.now().minusDays(1));
-//        existingRecord.setStatus(statusEntity);
-//        existingRecord.setDoctor(doctorEntity);
-//
-//        DoctorRecordDto updateDto = new DoctorRecordDto(1L, LocalDateTime.now(), "ACTIVE", 1L);
-//
-//        when(doctorRecordRepository.existsById(1L)).thenReturn(true);
-//        when(doctorRecordRepository.findById(1L)).thenReturn(Optional.of(existingRecord));
-//        when(recordStatusRepository.findByStatus("ACTIVE")).thenReturn(Optional.of(statusEntity));
-//        when(doctorRepository.findById(1L)).thenReturn(Optional.of(doctorEntity));
-//        when(doctorRecordRepository.save(any())).thenReturn(existingRecord);
-//
-//        DoctorRecordDto result = doctorRecordService.update(updateDto);
-//
-//        assertNotNull(result, "Result should not be null");
-//        assertEquals(1L, result.getId());
-//        assertEquals("ACTIVE", result.getStatus());
-//        verify(doctorRecordRepository).save(any());
-//    }
+    @Test
+    void shouldUpdateDoctorRecord_whenValidDtoProvided() {
+        RecordStatusEntity statusEntity = new RecordStatusEntity("ACTIVE");
+        DoctorEntity doctorEntity = new DoctorEntity();
+        doctorEntity.setId(1L);
+
+        DoctorRecordEntity existingRecord = new DoctorRecordEntity();
+        existingRecord.setId(1L);
+        existingRecord.setUpdated(LocalDateTime.now().minusDays(1));
+        existingRecord.setStatus(statusEntity);
+        existingRecord.setDoctor(doctorEntity);
+
+        DoctorRecordDto updateDto = new DoctorRecordDto(1L, LocalDateTime.now(), "ACTIVE", 1L);
+
+        when(doctorRecordRepository.existsById(anyLong())).thenReturn(true);
+        when(doctorRecordMapper.toDoctorRecordEntity(any(DoctorRecordDto.class))).thenReturn(existingRecord);
+        when(doctorRecordRepository.save(any(DoctorRecordEntity.class))).thenReturn(existingRecord);
+        when(doctorRecordMapper.toDoctorRecordDto(any(DoctorRecordEntity.class))).thenReturn(updateDto);
+
+        DoctorRecordDto result = doctorRecordService.update(updateDto);
+
+        assertNotNull(result, "Result should not be null");
+        assertEquals(1L, result.getId());
+        assertEquals("ACTIVE", result.getStatus());
+
+        verify(doctorRecordRepository).existsById(1L);
+        verify(doctorRecordMapper).toDoctorRecordEntity(updateDto);
+        verify(doctorRecordRepository).save(existingRecord);
+        verify(doctorRecordMapper).toDoctorRecordDto(existingRecord);
+    }
 
     @Test
     void shouldThrowException_whenUpdatingNonexistentDoctorRecord() {

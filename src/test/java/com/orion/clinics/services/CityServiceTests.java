@@ -1,4 +1,4 @@
-package com.orion.clinics;
+package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.CityDto;
 import com.orion.clinics.dtos.CountryDto;
@@ -8,8 +8,6 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CityRepository;
-import com.orion.clinics.services.CityService;
-import com.orion.clinics.services.CountryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

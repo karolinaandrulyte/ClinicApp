@@ -1,4 +1,4 @@
-package com.orion.clinics;
+package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.DocumentDto;
 import com.orion.clinics.entities.*;
@@ -6,7 +6,6 @@ import com.orion.clinics.enums.DocumentType;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DocumentMapper;
 import com.orion.clinics.repositories.DocumentRepository;
-import com.orion.clinics.services.DocumentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
