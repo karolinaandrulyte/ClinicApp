@@ -10,6 +10,11 @@ spring:
     hibernate:
       ddl-auto: none # Disable Hibernate's schema management
     show-sql: true
+  logging:
+    level:
+      root: DEBUG
+      com.orion.clinics.services: DEBUG
+      com.orion.clinics: DEBUG
   security:
     oauth2:
       client:
