@@ -28,4 +28,40 @@ public class ClinicRecordEntity {
         @ManyToOne
         @JoinColumn(name = "clinic_id")
         private ClinicEntity clinic;
+
+        public static Builder builder() {
+                return new Builder();
+        }
+
+        public static class Builder {
+                private Long id;
+                private ClinicStatusEntity status;
+                private LocalDateTime updated;
+                private ClinicEntity clinic;
+
+                public ClinicRecordEntity build() {
+                        return new ClinicRecordEntity(id, status, updated, clinic);
+                }
+
+                public Builder setId(Long id) {
+                        this.id = id;
+                        return this;
+                }
+
+                public Builder setStatus(ClinicStatusEntity status) {
+                        this.status = status;
+                        return this;
+                }
+
+                public Builder setUpdated(LocalDateTime updated) {
+                        this.updated = updated;
+                        return this;
+                }
+
+                public Builder setClinic(ClinicEntity clinic) {
+                        this.clinic = clinic;
+                        return this;
+                }
+
+        }
 }

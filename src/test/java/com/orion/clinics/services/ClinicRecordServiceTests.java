@@ -7,6 +7,8 @@ import com.orion.clinics.entities.ClinicStatusEntity;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.ClinicRecordMapper;
 import com.orion.clinics.repositories.ClinicRecordRepository;
+import com.orion.clinics.repositories.ClinicRepository;
+import com.orion.clinics.repositories.ClinicStatusRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +32,12 @@ public class ClinicRecordServiceTests {
     @Mock
     private ClinicRecordMapper clinicRecordMapper;
 
+    @Mock
+    private ClinicStatusRepository clinicStatusRepository;
+
+    @Mock
+    private ClinicRepository clinicRepository;
+
     @InjectMocks
     private ClinicRecordService clinicRecordService;
 
@@ -48,6 +56,32 @@ public class ClinicRecordServiceTests {
 
         assertNotNull(result);
         assertEquals(savedDto, result);
+        verify(clinicRecordRepository).save(clinicRecordEntity);
+    }
+
+    @Test
+    void shouldSaveClinicRecordUsingBuilder_whenValidDtoProvided() { // to display builder pattern
+        ClinicRecordDto clinicRecordDto = new ClinicRecordDto(null, "open", LocalDateTime.now(), 1L);
+        ClinicStatusEntity statusEntity = new ClinicStatusEntity("open");
+        ClinicEntity clinicEntity = new ClinicEntity(1L, "Clinic A", "Address", null);
+        ClinicRecordEntity clinicRecordEntity = ClinicRecordEntity.builder()
+                .setStatus(statusEntity)
+                .setUpdated(clinicRecordDto.getUpdated())
+                .setClinic(clinicEntity)
+                .build();
+        ClinicRecordEntity savedEntity = new ClinicRecordEntity(1L, statusEntity, clinicRecordDto.getUpdated(), clinicEntity);
+        ClinicRecordDto savedDto = new ClinicRecordDto(1L, "open", savedEntity.getUpdated(), 1L);
+
+        when(clinicStatusRepository.findById(clinicRecordDto.getStatusName())).thenReturn(Optional.of(statusEntity));
+        when(clinicRepository.findById(clinicRecordDto.getClinicId())).thenReturn(Optional.of(clinicEntity));
+        when(clinicRecordRepository.save(clinicRecordEntity)).thenReturn(savedEntity);
+        when(clinicRecordMapper.toClinicRecordDto(savedEntity)).thenReturn(savedDto);
+
+        ClinicRecordDto result = clinicRecordService.saveUsingBuilder(clinicRecordDto);
+
+        assertNotNull(result);
+        assertEquals(savedDto, result);
+        verify(clinicRecordRepository).save(any(ClinicRecordEntity.class));
         verify(clinicRecordRepository).save(clinicRecordEntity);
     }
 

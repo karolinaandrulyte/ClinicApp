@@ -10,11 +10,6 @@ spring:
     hibernate:
       ddl-auto: none # Disable Hibernate's schema management
     show-sql: true
-  logging:
-    level:
-      root: DEBUG
-      com.orion.clinics.services: DEBUG
-      com.orion.clinics: DEBUG
   security:
     oauth2:
       client:
@@ -49,3 +44,8 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: app-group
+logging:
+  level:
+    root: INFO
+    com.orion.clinics.services: DEBUG
+    com.orion.clinics: DEBUG
