@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -18,7 +19,7 @@ public class WebSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.
                 authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                                .requestMatchers("/cities/**").authenticated()
+                                .requestMatchers("/cities/**").permitAll()
                                 .requestMatchers("/clinics/**").authenticated()
                                 .requestMatchers("/clinic-status/**").authenticated()
                                 .requestMatchers("/countries/**").authenticated()
@@ -31,7 +32,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/admin/**").hasAuthority(ADMIN)
                                 .requestMatchers("/record-status/**").hasAuthority(ADMIN)
 
-                                .requestMatchers(HttpMethod.POST, "/cities/").hasAuthority(ADMIN)
+                                .requestMatchers(HttpMethod.POST, "/cities/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/clinics/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.POST, "/clinic-status/").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.POST, "/countries/").hasAuthority(ADMIN)
@@ -39,7 +40,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/documents/").hasAnyAuthority(ADMIN, DOCTOR)
                                 .requestMatchers(HttpMethod.POST, "/specialties/").hasAuthority(ADMIN)
 
-                                .requestMatchers(HttpMethod.GET, "/cities").hasAuthority(ADMIN)
+                                .requestMatchers(HttpMethod.GET, "/cities").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/cities/{id}").hasAnyAuthority(ADMIN, PATIENT)
                                 .requestMatchers(HttpMethod.GET, "/clinics").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.GET, "/clinics/{id}").hasAnyAuthority(DOCTOR, ADMIN, PATIENT)
@@ -57,13 +58,13 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/documents/clinic/{clinicId}").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.GET, "/specialties**").hasAuthority(ADMIN)
 
-                                .requestMatchers(HttpMethod.PATCH, "/cities/**").hasAuthority(ADMIN)
+                                .requestMatchers(HttpMethod.PATCH, "/cities/**").permitAll()
                                 .requestMatchers(HttpMethod.PATCH, "/clinics/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.PATCH, "/countries/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.PATCH, "/doctors/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.PATCH, "/documents/**").hasAuthority(ADMIN)
 
-                                .requestMatchers(HttpMethod.DELETE, "/cities/**").hasAuthority(ADMIN)
+                                .requestMatchers(HttpMethod.DELETE, "/cities/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE, "/clinics/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.DELETE, "/clinic-status/**").hasAuthority(ADMIN)
                                 .requestMatchers(HttpMethod.DELETE, "/countries/**").hasAuthority(ADMIN)
@@ -73,7 +74,8 @@ public class WebSecurityConfig {
                                 .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(Customizer.withDefaults()));       // Default JWT Configuration
+                        .jwt(Customizer.withDefaults()));
+        http.csrf(AbstractHttpConfigurer::disable); // Disable CSRF if it's blocking requests; Default JWT Configuration
         return http.build();
     }
 }

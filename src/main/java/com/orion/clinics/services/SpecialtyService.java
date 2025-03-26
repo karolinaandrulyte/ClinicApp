@@ -7,6 +7,7 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.SpecialtyMapper;
 import com.orion.clinics.repositories.SpecialtyRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class SpecialtyService {
         this.specialtyMapper = specialtyMapper;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public SpecialtyDto save(SpecialtyDto specialtyDto) {
         if(specialtyRepository.existsById(specialtyDto.getName())) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Specialty with name " + specialtyDto.getName() + " already exists.");
@@ -30,6 +32,7 @@ public class SpecialtyService {
         return specialtyMapper.toSpecialtyDto(savedSpecialty);
     }
 
+    @Transactional
     public List<SpecialtyDto> findAll() {
         List<SpecialtyEntity> specialties = specialtyRepository.findAll();
         return specialties.stream()
@@ -37,10 +40,12 @@ public class SpecialtyService {
                 .toList();
     }
 
+    @Transactional
     public boolean existsByName(String name) {
         return specialtyRepository.existsById(name);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByName(String name) {
         SpecialtyEntity specialty = specialtyRepository.findById(name)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found with name: " + name));

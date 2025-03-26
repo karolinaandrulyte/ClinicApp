@@ -10,6 +10,7 @@ import com.orion.clinics.mappers.CityMapper;
 import com.orion.clinics.mappers.CountryMapper;
 import com.orion.clinics.repositories.CityRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class CityService {
         this.countryService = countryService;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public CityDto save(CityDto cityDto) {
         CountryDto countryDto = countryService.findByIsoCode(cityDto.getCountryIsoCode());
         if (countryDto == null) {
@@ -44,6 +46,7 @@ public class CityService {
         return cityMapper.toCityDto(savedCity);
     }
 
+    @Transactional
     public List<CityDto> findAll() {
         List<CityEntity> cities = cityRepository.findAll();
         return cities.stream()
@@ -51,13 +54,14 @@ public class CityService {
                 .toList();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public CityDto findById(Long id) {
         CityEntity cityEntity = cityRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id));
-
         return cityMapper.toCityDto(cityEntity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public CityDto update(Long id, CityDto cityDto) {
         CityEntity cityEntity = cityRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id));
@@ -67,11 +71,10 @@ public class CityService {
         cityEntity.setName(cityDto.getName());
         cityEntity.setCountry(countryMapper.toCountryEntity(countryDto));
 
-        CityEntity updatedCity = cityRepository.save(cityEntity);
-
-        return cityMapper.toCityDto(updatedCity);
+        return cityMapper.toCityDto(cityEntity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         if (!cityRepository.existsById(id)) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "City not found with id: " + id);

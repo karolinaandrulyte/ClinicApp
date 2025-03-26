@@ -11,8 +11,8 @@ import com.orion.clinics.repositories.ClinicRecordRepository;
 import com.orion.clinics.repositories.ClinicRepository;
 import com.orion.clinics.repositories.ClinicStatusRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,12 +33,17 @@ public class ClinicRecordService {
         this.clinicRepository = clinicRepository;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ClinicRecordDto save(ClinicRecordDto clinicRecordDto) {
         ClinicRecordEntity clinicRecord = clinicRecordMapper.toClinicRecordEntity(clinicRecordDto);
+        if (clinicRecordRepository.existsById(clinicRecord.getId())) {
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Clinic record already exists: " + clinicRecord.getId());
+        }
         ClinicRecordEntity savedClinicRecord = clinicRecordRepository.save(clinicRecord);
         return clinicRecordMapper.toClinicRecordDto(savedClinicRecord);
     }
 
+    @Transactional
     public ClinicRecordDto saveUsingBuilder(ClinicRecordDto clinicRecordDto) {
         ClinicStatusEntity status = clinicStatusRepository.findById(clinicRecordDto.getStatusName()).orElse(null);
         ClinicEntity clinic = clinicRepository.findById(clinicRecordDto.getClinicId()).orElse(null);
@@ -53,6 +58,7 @@ public class ClinicRecordService {
         return clinicRecordMapper.toClinicRecordDto(savedClinicRecord);
     }
 
+    @Transactional
     public List<ClinicRecordDto> findAll() {
         List<ClinicRecordEntity> clinicRecords = clinicRecordRepository.findAll();
         return clinicRecords.stream()
@@ -60,12 +66,14 @@ public class ClinicRecordService {
                 .toList();
     }
 
+    @Transactional
     public ClinicRecordDto findById(Long id) {
         ClinicRecordEntity clinicRecord = clinicRecordRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic record not found with id: " + id));
         return clinicRecordMapper.toClinicRecordDto(clinicRecord);
     }
 
+    @Transactional
     public List<ClinicRecordDto> findByClinicId(Long clinicId) {
         List<ClinicRecordEntity> clinicRecords = clinicRecordRepository.findByClinicId(clinicId);
         return clinicRecords.stream()
@@ -73,6 +81,7 @@ public class ClinicRecordService {
                 .toList();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ClinicRecordDto update(ClinicRecordDto clinicRecordDto) {
         if (clinicRecordDto.getId() == null || !clinicRecordRepository.existsById(clinicRecordDto.getId())) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic record not found with id: " + clinicRecordDto.getId());
@@ -88,10 +97,11 @@ public class ClinicRecordService {
         if (clinicRecordDto.getClinicId() != null) {
             existingClinicRecord.setClinic(clinicRecordMapper.toClinicRecordEntity(clinicRecordDto).getClinic());
         }
-        ClinicRecordEntity updatedClinicRecord = clinicRecordRepository.save(existingClinicRecord);
-        return clinicRecordMapper.toClinicRecordDto(updatedClinicRecord);
+//        ClinicRecordEntity updatedClinicRecord = clinicRecordRepository.save(existingClinicRecord); since transactional, no need to save
+        return clinicRecordMapper.toClinicRecordDto(existingClinicRecord);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         if (!clinicRecordRepository.existsById(id)) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic record not found with id: " + id);

@@ -7,9 +7,9 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.ClinicMapper;
 import com.orion.clinics.repositories.ClinicRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClinicService {
@@ -22,12 +22,17 @@ public class ClinicService {
         this.clinicMapper = clinicMapper;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ClinicDto saveClinic(ClinicDto clinicDto) {
         ClinicEntity clinic = clinicMapper.toClinicEntity(clinicDto);
-        ClinicEntity savedClinic = clinicRepository.save(clinic);
-        return clinicMapper.toClinicDto(savedClinic);
+        if (clinicRepository.existsByName(clinic.getName())) {
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Clinic already exists: " + clinic.getName());
+        }
+//        ClinicEntity savedClinic = clinicRepository.save(clinic); since transactional, no need to save
+        return clinicMapper.toClinicDto(clinic);
     }
 
+    @Transactional
     public List<ClinicDto> findAll() {
         List<ClinicEntity> clinics = clinicRepository.findAll();
         return clinics.stream()
@@ -35,12 +40,14 @@ public class ClinicService {
                 .toList();
     }
 
+    @Transactional
     public ClinicDto findById(Long id) {
         ClinicEntity clinic = clinicRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + id));
         return clinicMapper.toClinicDto(clinic);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ClinicDto updateClinic(Long id, ClinicDto clinicDto) {
         if (clinicDto.getId() == null || !clinicRepository.existsById(clinicDto.getId())) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicDto.getId());
@@ -60,6 +67,7 @@ public class ClinicService {
         return clinicMapper.toClinicDto(updatedClinic);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         if (!clinicRepository.existsById(id)) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + id);

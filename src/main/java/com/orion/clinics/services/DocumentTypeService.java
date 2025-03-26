@@ -7,6 +7,7 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DocumentTypeMapper;
 import com.orion.clinics.repositories.DocumentTypeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,12 +21,14 @@ public class DocumentTypeService {
         this.documentTypeMapper = documentTypeMapper;
     }
 
-    public DocumentTypeDto save(DocumentTypeDto documentTypeDto) {
-        DocumentTypeEntity documentType = documentTypeMapper.toDocumentTypeEntity(documentTypeDto);
-        DocumentTypeEntity savedDocumentType = documentTypeRepository.save(documentType);
-        return documentTypeMapper.toDocumentTypeDto(savedDocumentType);
-    }
+//    @Transactional(rollbackFor = Exception.class)
+//    public DocumentTypeDto save(DocumentTypeDto documentTypeDto) {
+//        DocumentTypeEntity documentType = documentTypeMapper.toDocumentTypeEntity(documentTypeDto);
+//        DocumentTypeEntity savedDocumentType = documentTypeRepository.save(documentType);
+//        return documentTypeMapper.toDocumentTypeDto(savedDocumentType);
+//    }
 
+    @Transactional
     public List<DocumentTypeDto> findAll() {
         List<DocumentTypeEntity> documentTypes = documentTypeRepository.findAll();
         return documentTypes.stream()
@@ -33,10 +36,12 @@ public class DocumentTypeService {
                 .toList();
     }
 
+    @Transactional
     public boolean existsByType(String type) {
         return documentTypeRepository.existsById(type);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByType(String type) {
         DocumentTypeEntity documentType = documentTypeRepository.findById(type)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Document type not found with type: " + type));

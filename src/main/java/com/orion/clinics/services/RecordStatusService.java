@@ -7,6 +7,7 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class RecordStatusService {
         this.recordStatusMapper = recordStatusMapper;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public RecordStatusDto save(RecordStatusDto recordStatusDto) {
         if (recordStatusRepository.existsByStatus(recordStatusDto.getStatus())) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Record status already exists: " + recordStatusDto.getStatus());
@@ -30,6 +32,7 @@ public class RecordStatusService {
         return recordStatusMapper.toRecordStatusDto(savedRecordStatus);
     }
 
+    @Transactional
     public List<RecordStatusDto> findAll() {
         List<RecordStatusEntity> recordStatuses = recordStatusRepository.findAll();
         return recordStatuses.stream()
@@ -37,10 +40,12 @@ public class RecordStatusService {
                 .toList();
     }
 
+    @Transactional
     public boolean existsByStatus(String status) {
         return recordStatusRepository.existsByStatus(status);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByStatus(String status) {
         RecordStatusEntity recordStatus = recordStatusRepository.findByStatus(status)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Record status not found with status: " + status));

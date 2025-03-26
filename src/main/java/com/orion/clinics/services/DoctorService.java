@@ -9,10 +9,9 @@ import com.orion.clinics.mappers.DoctorMapper;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.SpecialtyRepository;
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class DoctorService {
         this.doctorMapper = doctorMapper;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DoctorDto save(DoctorDto doctorDto) {
         if (doctorDto.getSpecialties() == null || doctorDto.getSpecialties().isEmpty()) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "At least one specialty is required.");
@@ -49,6 +48,7 @@ public class DoctorService {
         return doctorMapper.toDoctorDto(savedDoctor);
     }
 
+    @Transactional
     public List<DoctorDto> findAll() {
         List<DoctorEntity> doctors = doctorRepository.findAll();
         return doctors.stream()
@@ -56,12 +56,14 @@ public class DoctorService {
                 .toList();
     }
 
+    @Transactional
     public DoctorDto findById(Long id) {
         DoctorEntity doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found with id: " + id));
         return doctorMapper.toDoctorDto(doctor);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public DoctorDto update(Long id, DoctorDto doctorDto) {
         DoctorEntity existingDoctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor with ID " + id + " not found"));
@@ -69,10 +71,11 @@ public class DoctorService {
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
         doctor.setId(existingDoctor.getId());
 
-        DoctorEntity updatedDoctor = doctorRepository.save(doctor);
-        return doctorMapper.toDoctorDto(updatedDoctor);
+//        DoctorEntity updatedDoctor = doctorRepository.save(doctor); since transactional, no need to save
+        return doctorMapper.toDoctorDto(existingDoctor);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         if (!doctorRepository.existsById(id)) {
             throw new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor with ID " + id + " not found");

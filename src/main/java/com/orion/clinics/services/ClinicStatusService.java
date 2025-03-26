@@ -7,6 +7,7 @@ import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.ClinicStatusMapper;
 import com.orion.clinics.repositories.ClinicStatusRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ClinicStatusService {
         this.clinicStatusMapper = clinicStatusMapper;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ClinicStatusDto save(ClinicStatusDto clinicStatusDto) {
         if (clinicStatusRepository.existsByStatus(clinicStatusDto.getStatus())) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Clinic status already exists: " + clinicStatusDto.getStatus());
@@ -30,6 +32,7 @@ public class ClinicStatusService {
         return clinicStatusMapper.toClinicStatusDto(savedClinicStatus);
     }
 
+    @Transactional
     public List<ClinicStatusDto> findAll() {
         List<ClinicStatusEntity> clinicStatuses = clinicStatusRepository.findAll();
         return clinicStatuses.stream()
@@ -37,10 +40,12 @@ public class ClinicStatusService {
                 .toList();
     }
 
+    @Transactional
     public boolean existsByStatus(String status) {
         return clinicStatusRepository.existsByStatus(status);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByStatus(String status) {
         ClinicStatusEntity clinicStatus = clinicStatusRepository.findByStatus(status)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic status not found with status: " + status));
