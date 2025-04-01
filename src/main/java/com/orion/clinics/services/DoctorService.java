@@ -44,13 +44,17 @@ public class DoctorService {
         doctor.getSpecialties().clear();
         doctor.setSpecialties(existingSpecialties);
 
+        if (doctorDto.getDoctorType() != null) {
+            doctor.setDoctorType(doctorDto.getDoctorType());
+        }
+
         DoctorEntity savedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorDto(savedDoctor);
     }
 
     @Transactional
     public List<DoctorDto> findAll() {
-        List<DoctorEntity> doctors = doctorRepository.findAll();
+        List<? extends DoctorEntity> doctors = doctorRepository.findAll();
         return doctors.stream()
                 .map(doctorMapper::toDoctorDto)
                 .toList();
@@ -63,6 +67,14 @@ public class DoctorService {
         return doctorMapper.toDoctorDto(doctor);
     }
 
+    @Transactional
+    public List<DoctorDto> findByDoctorType(String doctorType) {
+        List<DoctorEntity> doctors = doctorRepository.findByDoctorType(doctorType);
+        return doctors.stream()
+                .map(doctorMapper::toDoctorDto)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public DoctorDto update(Long id, DoctorDto doctorDto) {
         DoctorEntity existingDoctor = doctorRepository.findById(id)
@@ -70,6 +82,10 @@ public class DoctorService {
 
         DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
         doctor.setId(existingDoctor.getId());
+
+        if (doctorDto.getDoctorType() != null) {
+            doctor.setDoctorType(doctorDto.getDoctorType());
+        }
 
 //        DoctorEntity updatedDoctor = doctorRepository.save(doctor); since transactional, no need to save
         return doctorMapper.toDoctorDto(existingDoctor);

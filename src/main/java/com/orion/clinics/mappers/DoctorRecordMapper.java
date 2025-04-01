@@ -2,7 +2,6 @@ package com.orion.clinics.mappers;
 
 import com.orion.clinics.dtos.DoctorRecordDto;
 import com.orion.clinics.entities.DoctorRecordEntity;
-import com.orion.clinics.entities.RecordStatusEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,10 +11,8 @@ public interface DoctorRecordMapper {
     @Mapping(source = "status.status", target = "status")
     DoctorRecordDto toDoctorRecordDto(DoctorRecordEntity doctorRecordEntity);
 
-    @Mapping(target = "doctor.id", source = "doctorId")
+    @Mapping(target = "doctor", ignore = true)
     @Mapping(source = "status", target = "status.status")
     DoctorRecordEntity toDoctorRecordEntity(DoctorRecordDto doctorRecordDto);
-
-    String map(RecordStatusEntity status);
 
 }

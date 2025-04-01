@@ -32,4 +32,5 @@ public class DoctorDto {
 
     private Set<SpecialtyDto> specialties;
     private List<ClinicDto> clinics;
+    private String doctorType;
 }

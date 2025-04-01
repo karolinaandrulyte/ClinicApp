@@ -11,3 +11,9 @@ databaseChangeLog:
       sqlFile:
         path: 2024-02-18-add_document-types.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 3
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-03-27-add_doctor-types.sql
+        relativeToChangelogFile: true

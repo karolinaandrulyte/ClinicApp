@@ -60,7 +60,7 @@ public class TestController {
                 new ClinicDto(),
                 new ClinicDto()
         );
-        return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics);
+        return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics, "INTERN");
     }
 
     @GetMapping("/doctorRecords-dummy")

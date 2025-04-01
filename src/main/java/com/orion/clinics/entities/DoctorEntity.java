@@ -1,7 +1,6 @@
 package com.orion.clinics.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "doctors")
-public class DoctorEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "doctor_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class DoctorEntity { // abstraction only for adding PECS in other layers
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,4 +56,7 @@ public class DoctorEntity {
             inverseJoinColumns = @JoinColumn(name = "clinic_id")
     )
     private List<ClinicEntity> clinics;
+
+    @Column(name = "doctor_type", insertable=false, updatable=false)
+    private String doctorType;
 }

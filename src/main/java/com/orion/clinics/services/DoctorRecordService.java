@@ -34,18 +34,15 @@ public class DoctorRecordService {
     public DoctorRecordDto save(DoctorRecordDto doctorRecordDto) {
         RecordStatusEntity status = recordStatusRepository.findByStatus(doctorRecordDto.getStatus())
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Status not found: " + doctorRecordDto.getStatus()));
+
         DoctorEntity doctor = doctorRepository.findById(doctorRecordDto.getDoctorId())
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found: " + doctorRecordDto.getDoctorId()));
 
-        DoctorRecordEntity doctorRecord = new DoctorRecordEntity();
-        doctorRecord.setUpdated(doctorRecordDto.getUpdated());
-        doctorRecord.setStatus(status);
+        DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDto);
         doctorRecord.setDoctor(doctor);
 
         DoctorRecordEntity savedDoctorRecord = doctorRecordRepository.save(doctorRecord);
-
-        return new DoctorRecordDto(savedDoctorRecord.getId(), savedDoctorRecord.getUpdated(),
-                        savedDoctorRecord.getStatus().getStatus(), savedDoctorRecord.getDoctor().getId());
+        return doctorRecordMapper.toDoctorRecordDto(savedDoctorRecord);
     }
 
     @Transactional
