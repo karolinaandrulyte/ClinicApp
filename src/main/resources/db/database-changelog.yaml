@@ -17,3 +17,9 @@ databaseChangeLog:
       sqlFile:
         path: 2025-03-27-add_doctor-types.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 4
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-04-02-add_clinic_id_to_doctor-records.sql
+        relativeToChangelogFile: true

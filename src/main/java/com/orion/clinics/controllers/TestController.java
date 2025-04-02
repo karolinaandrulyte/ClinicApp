@@ -40,7 +40,7 @@ public class TestController {
 
     @GetMapping("/recordStatus-dummy")
     public RecordStatusDto getDummyRecordStatus() {
-        return new RecordStatusDto("dummy status");
+        return new RecordStatusDto("dummy status", "dummy description");
     }
 
     @GetMapping("/clinics-dummy")
@@ -69,6 +69,7 @@ public class TestController {
         doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
         doctorRecordDto.setStatus("employed");
         doctorRecordDto.setDoctorId(14L);
+        doctorRecordDto.setClinicId(6L);
         return doctorRecordDto;
     }
 

@@ -14,4 +14,5 @@ public class DoctorRecordDto {
     private LocalDateTime updated;
     private String status;
     private Long doctorId;
+    private Long clinicId;
 }

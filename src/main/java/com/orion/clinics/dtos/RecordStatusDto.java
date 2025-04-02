@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class RecordStatusDto {
     private String status;
+    private String description;
 }

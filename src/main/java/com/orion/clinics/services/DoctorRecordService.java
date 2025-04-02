@@ -1,12 +1,14 @@
 package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.DoctorRecordDto;
+import com.orion.clinics.entities.ClinicEntity;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.DoctorRecordEntity;
 import com.orion.clinics.entities.RecordStatusEntity;
 import com.orion.clinics.enums.ClinicsAppErrors;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DoctorRecordMapper;
+import com.orion.clinics.repositories.ClinicRepository;
 import com.orion.clinics.repositories.DoctorRecordRepository;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.RecordStatusRepository;
@@ -22,12 +24,14 @@ public class DoctorRecordService {
     private final DoctorRecordMapper doctorRecordMapper;
     private final RecordStatusRepository recordStatusRepository;
     private final DoctorRepository doctorRepository;
+    private final ClinicRepository clinicRepository;
 
-    public DoctorRecordService(DoctorRecordRepository doctorRecordRepository, DoctorRecordMapper doctorRecordMapper, RecordStatusRepository recordStatusRepository, DoctorRepository doctorRepository) {
+    public DoctorRecordService(DoctorRecordRepository doctorRecordRepository, DoctorRecordMapper doctorRecordMapper, RecordStatusRepository recordStatusRepository, DoctorRepository doctorRepository, ClinicRepository clinicRepository) {
         this.doctorRecordRepository = doctorRecordRepository;
         this.doctorRecordMapper = doctorRecordMapper;
         this.recordStatusRepository = recordStatusRepository;
         this.doctorRepository = doctorRepository;
+        this.clinicRepository = clinicRepository;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -38,8 +42,13 @@ public class DoctorRecordService {
         DoctorEntity doctor = doctorRepository.findById(doctorRecordDto.getDoctorId())
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found: " + doctorRecordDto.getDoctorId()));
 
+        ClinicEntity clinic = clinicRepository.findById(doctorRecordDto.getClinicId())
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found: " + doctorRecordDto.getClinicId()));
+
         DoctorRecordEntity doctorRecord = doctorRecordMapper.toDoctorRecordEntity(doctorRecordDto);
         doctorRecord.setDoctor(doctor);
+        doctorRecord.setClinic(clinic);
+        doctorRecord.setStatus(status);
 
         DoctorRecordEntity savedDoctorRecord = doctorRecordRepository.save(doctorRecord);
         return doctorRecordMapper.toDoctorRecordDto(savedDoctorRecord);

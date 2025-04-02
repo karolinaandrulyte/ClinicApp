@@ -9,4 +9,3 @@ public interface RecordStatusMapper {
     RecordStatusDto toRecordStatusDto(RecordStatusEntity recordStatusEntity);
     RecordStatusEntity toRecordStatusEntity(RecordStatusDto recordStatusDto);
 }
-

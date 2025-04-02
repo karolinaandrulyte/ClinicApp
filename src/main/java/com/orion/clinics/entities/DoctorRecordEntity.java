@@ -22,10 +22,14 @@ public class DoctorRecordEntity {
     private LocalDateTime updated;
 
     @ManyToOne
-    @JoinColumn(name = "status_name")
+    @JoinColumn(name = "status", referencedColumnName = "status", nullable = false)
     private RecordStatusEntity status;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "clinic_id", nullable = false)
+    private ClinicEntity clinic;
 }

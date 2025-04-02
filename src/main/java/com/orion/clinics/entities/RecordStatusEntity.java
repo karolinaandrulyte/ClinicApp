@@ -1,11 +1,10 @@
 package com.orion.clinics.entities;
 
+import com.orion.clinics.enums.RecordStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +13,10 @@ import java.util.List;
 public class RecordStatusEntity {
 
     @Id
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, unique = true)
+    private RecordStatus status;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 }
