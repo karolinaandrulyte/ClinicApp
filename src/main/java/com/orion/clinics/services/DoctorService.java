@@ -1,11 +1,13 @@
 package com.orion.clinics.services;
 
 import com.orion.clinics.dtos.DoctorDto;
+import com.orion.clinics.entities.ClinicEntity;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.SpecialtyEntity;
 import com.orion.clinics.enums.ClinicsAppErrors;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DoctorMapper;
+import com.orion.clinics.repositories.ClinicRepository;
 import com.orion.clinics.repositories.DoctorRepository;
 import com.orion.clinics.repositories.SpecialtyRepository;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,13 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final SpecialtyRepository specialtyRepository;
     private final DoctorMapper doctorMapper;
+    private final ClinicRepository clinicRepository;
 
-    public DoctorService(DoctorRepository doctorRepository, SpecialtyRepository specialtyRepository, DoctorMapper doctorMapper) {
+    public DoctorService(DoctorRepository doctorRepository, SpecialtyRepository specialtyRepository, DoctorMapper doctorMapper, ClinicRepository clinicRepository) {
         this.doctorRepository = doctorRepository;
         this.specialtyRepository = specialtyRepository;
         this.doctorMapper = doctorMapper;
+        this.clinicRepository = clinicRepository;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -40,13 +44,14 @@ public class DoctorService {
                 .map(specialtyDto -> specialtyRepository.findByName(specialtyDto.getName())
                         .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found: " + specialtyDto.getName(), specialtyDto.getName())))
                 .collect(Collectors.toSet());
-
         doctor.getSpecialties().clear();
         doctor.setSpecialties(existingSpecialties);
 
-        if (doctorDto.getDoctorType() != null) {
-            doctor.setDoctorType(doctorDto.getDoctorType());
-        }
+        List<ClinicEntity> clinics = doctorDto.getClinics().stream()
+                .map(clinicDto -> clinicRepository.findById(clinicDto.getId())
+                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicDto.getId(), clinicDto.getId().toString())))
+                .collect(Collectors.toList());
+        doctor.setClinics(clinics);
 
         DoctorEntity savedDoctor = doctorRepository.save(doctor);
         return doctorMapper.toDoctorDto(savedDoctor);

@@ -6,6 +6,7 @@ import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.DoctorRecordEntity;
 import com.orion.clinics.entities.RecordStatusEntity;
 import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.enums.RecordStatus;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.DoctorRecordMapper;
 import com.orion.clinics.repositories.ClinicRepository;
@@ -15,7 +16,9 @@ import com.orion.clinics.repositories.RecordStatusRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +39,10 @@ public class DoctorRecordService {
 
     @Transactional(rollbackFor = Exception.class)
     public DoctorRecordDto save(DoctorRecordDto doctorRecordDto) {
-        RecordStatusEntity status = recordStatusRepository.findByStatus(doctorRecordDto.getStatus())
-                .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Status not found: " + doctorRecordDto.getStatus()));
+        RecordStatus statusName = Optional.ofNullable(doctorRecordDto.getStatus())
+                .orElseThrow(() -> new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Status is required."));
+
+        RecordStatusEntity status = recordStatusRepository.findByStatus(statusName).get();
 
         DoctorEntity doctor = doctorRepository.findById(doctorRecordDto.getDoctorId())
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor not found: " + doctorRecordDto.getDoctorId()));
@@ -49,6 +54,10 @@ public class DoctorRecordService {
         doctorRecord.setDoctor(doctor);
         doctorRecord.setClinic(clinic);
         doctorRecord.setStatus(status);
+
+        if (doctorRecord.getStatusStartDate() == null) {
+            doctorRecord.setStatusStartDate(LocalDate.now());
+        }
 
         DoctorRecordEntity savedDoctorRecord = doctorRecordRepository.save(doctorRecord);
         return doctorRecordMapper.toDoctorRecordDto(savedDoctorRecord);

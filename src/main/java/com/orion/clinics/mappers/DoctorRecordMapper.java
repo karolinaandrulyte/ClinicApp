@@ -18,6 +18,7 @@ public interface DoctorRecordMapper {
     @Mapping(target = "doctor", ignore = true)
     @Mapping(target = "clinic", ignore = true)
     @Mapping(target = "status", source = "status", qualifiedByName = "mapStatusToEntity")
+    @Mapping(target = "updated", ignore = true)
     DoctorRecordEntity toDoctorRecordEntity(DoctorRecordDto doctorRecordDto);
 
     @Named("mapStatusToEntity")

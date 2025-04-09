@@ -1,6 +1,7 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.*;
+import com.orion.clinics.enums.RecordStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,10 +67,11 @@ public class TestController {
     @GetMapping("/doctorRecords-dummy")
     public DoctorRecordDto getDummyDoctorRecord() {
         DoctorRecordDto doctorRecordDto = new DoctorRecordDto();
-        doctorRecordDto.setUpdated(LocalDateTime.parse("2025-02-06T10:00:00"));
-        doctorRecordDto.setStatus("employed");
+        doctorRecordDto.setStatus(RecordStatus.EMPLOYED);
         doctorRecordDto.setDoctorId(14L);
         doctorRecordDto.setClinicId(6L);
+        doctorRecordDto.setStatusStartDate(LocalDate.parse("2025-04-08"));
+        doctorRecordDto.setStatusEndDate(LocalDate.parse("2026-04-07"));
         return doctorRecordDto;
     }
 

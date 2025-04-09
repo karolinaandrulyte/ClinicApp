@@ -3,6 +3,7 @@ package com.orion.clinics.services;
 import com.orion.clinics.dtos.RecordStatusDto;
 import com.orion.clinics.entities.RecordStatusEntity;
 import com.orion.clinics.enums.ClinicsAppErrors;
+import com.orion.clinics.enums.RecordStatus;
 import com.orion.clinics.exception.ApiException;
 import com.orion.clinics.mappers.RecordStatusMapper;
 import com.orion.clinics.repositories.RecordStatusRepository;
@@ -47,9 +48,10 @@ public class RecordStatusService {
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteByStatus(String status) {
-        RecordStatusEntity recordStatus = recordStatusRepository.findByStatus(status)
+        RecordStatus recordStatus = RecordStatus.valueOf(status);
+        RecordStatusEntity recordStatusEntity = recordStatusRepository.findByStatus(recordStatus)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Record status not found with status: " + status));
-        recordStatusRepository.delete(recordStatus);
+        recordStatusRepository.delete(recordStatusEntity);
     }
 
 }

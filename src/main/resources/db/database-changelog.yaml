@@ -23,3 +23,15 @@ databaseChangeLog:
       sqlFile:
         path: 2025-04-02-add_clinic_id_to_doctor-records.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 5
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-04-03-insert_new_statuses_to_record-status.sql
+        relativeToChangelogFile: true
+  - changeSet:
+      id: 6
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-04-08-update_doctor-records_dates.sql
+        relativeToChangelogFile: true

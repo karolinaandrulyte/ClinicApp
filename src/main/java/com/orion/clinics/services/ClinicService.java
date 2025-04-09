@@ -28,7 +28,7 @@ public class ClinicService {
         if (clinicRepository.existsByName(clinic.getName())) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "Clinic already exists: " + clinic.getName());
         }
-//        ClinicEntity savedClinic = clinicRepository.save(clinic); since transactional, no need to save
+        ClinicEntity savedClinic = clinicRepository.save(clinic);
         return clinicMapper.toClinicDto(clinic);
     }
 

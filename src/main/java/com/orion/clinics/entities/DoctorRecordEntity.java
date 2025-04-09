@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,13 +19,6 @@ public class DoctorRecordEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "updated", nullable = false)
-    private LocalDateTime updated;
-
-    @ManyToOne
-    @JoinColumn(name = "status", referencedColumnName = "status", nullable = false)
-    private RecordStatusEntity status;
-
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
@@ -32,4 +26,17 @@ public class DoctorRecordEntity {
     @ManyToOne
     @JoinColumn(name = "clinic_id", nullable = false)
     private ClinicEntity clinic;
+
+    @ManyToOne
+    @JoinColumn(name = "status_name", referencedColumnName = "status", nullable = false)
+    private RecordStatusEntity status;
+
+    @Column(name = "status_start_date", nullable = false)
+    private LocalDate statusStartDate;
+
+    @Column(name = "status_end_date")
+    private LocalDate statusEndDate;
+
+    @Column(name = "updated", updatable = false)
+    private LocalDateTime updated = LocalDateTime.now();
 }

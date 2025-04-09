@@ -28,8 +28,6 @@ public interface DoctorMapper {
             default -> throw new IllegalArgumentException("Invalid doctor type: " + doctorDto.getDoctorType());
         };
 
-        doctorEntity.setId(doctorDto.getId());
-        doctorEntity.setId(doctorDto.getId());
         doctorEntity.setFirstName(doctorDto.getFirstName());
         doctorEntity.setLastName(doctorDto.getLastName());
         doctorEntity.setDateOfBirth(doctorDto.getDateOfBirth());
