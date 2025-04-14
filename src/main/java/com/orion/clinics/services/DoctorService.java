@@ -1,6 +1,8 @@
 package com.orion.clinics.services;
 
+import com.orion.clinics.dtos.DoctorCreateDto;
 import com.orion.clinics.dtos.DoctorDto;
+import com.orion.clinics.dtos.DoctorUpdateDto;
 import com.orion.clinics.entities.ClinicEntity;
 import com.orion.clinics.entities.DoctorEntity;
 import com.orion.clinics.entities.SpecialtyEntity;
@@ -33,23 +35,26 @@ public class DoctorService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public DoctorDto save(DoctorDto doctorDto) {
-        if (doctorDto.getSpecialties() == null || doctorDto.getSpecialties().isEmpty()) {
+    public DoctorDto save(DoctorCreateDto doctorCreateDto) {
+        if (doctorCreateDto.getSpecialtyNames() == null || doctorCreateDto.getSpecialtyNames().isEmpty()) {
             throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "At least one specialty is required.");
         }
 
-        DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
+        if (doctorCreateDto.getClinicIds() == null || doctorCreateDto.getClinicIds().isEmpty()) {
+            throw new ApiException(ClinicsAppErrors.INVALID_ARGUMENT, "At least one clinic is required.");
+        }
 
-        Set<SpecialtyEntity> existingSpecialties = doctorDto.getSpecialties().stream()
-                .map(specialtyDto -> specialtyRepository.findByName(specialtyDto.getName())
-                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found: " + specialtyDto.getName(), specialtyDto.getName())))
+        DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorCreateDto);
+
+        Set<SpecialtyEntity> existingSpecialties = doctorCreateDto.getSpecialtyNames().stream()
+                .map(specialtyName  -> specialtyRepository.findByName(specialtyName)
+                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Specialty not found: " + specialtyName, specialtyName )))
                 .collect(Collectors.toSet());
-        doctor.getSpecialties().clear();
         doctor.setSpecialties(existingSpecialties);
 
-        List<ClinicEntity> clinics = doctorDto.getClinics().stream()
-                .map(clinicDto -> clinicRepository.findById(clinicDto.getId())
-                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicDto.getId(), clinicDto.getId().toString())))
+        List<ClinicEntity> clinics = doctorCreateDto.getClinicIds().stream()
+                .map(clinicId -> clinicRepository.findById(clinicId)
+                        .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Clinic not found with id: " + clinicId, clinicId.toString())))
                 .collect(Collectors.toList());
         doctor.setClinics(clinics);
 
@@ -81,19 +86,14 @@ public class DoctorService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public DoctorDto update(Long id, DoctorDto doctorDto) {
+    public DoctorDto update(Long id, DoctorUpdateDto doctorUpdateDto) {
         DoctorEntity existingDoctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ClinicsAppErrors.ENTITY_NOT_FOUND, "Doctor with ID " + id + " not found"));
 
-        DoctorEntity doctor = doctorMapper.toDoctorEntity(doctorDto);
-        doctor.setId(existingDoctor.getId());
+        doctorMapper.updateDoctorEntityFromDto(doctorUpdateDto, existingDoctor);
 
-        if (doctorDto.getDoctorType() != null) {
-            doctor.setDoctorType(doctorDto.getDoctorType());
-        }
-
-//        DoctorEntity updatedDoctor = doctorRepository.save(doctor); since transactional, no need to save
-        return doctorMapper.toDoctorDto(existingDoctor);
+        DoctorEntity updatedDoctor = doctorRepository.save(existingDoctor); // since transactional, no need to save
+        return doctorMapper.toDoctorDto(updatedDoctor);
     }
 
     @Transactional(rollbackFor = Exception.class)

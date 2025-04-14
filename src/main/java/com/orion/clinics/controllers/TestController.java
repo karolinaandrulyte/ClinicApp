@@ -2,19 +2,18 @@ package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.*;
 import com.orion.clinics.enums.RecordStatus;
+import lombok.Builder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import static com.orion.clinics.enums.DocumentType.CONSENT_FORM;
 
+@Builder
 @RestController
 @RequestMapping("/test")
 public class TestController {
@@ -49,19 +48,19 @@ public class TestController {
         return new ClinicDto(null, "Dummy Clinic", "1234 Clinic St", 5L);
     }
 
-    @GetMapping("/doctors-dummy")
-    public DoctorDto getDummyDoctor() {
-        Date dateOfBirth = Date.from(LocalDate.of(1990, 1, 1)
-                .atStartOfDay(ZoneId.systemDefault())
-                .toInstant());
-        Set<SpecialtyDto> specialties = Set.of(
-                new SpecialtyDto("cardiology"),
-                new SpecialtyDto("neurology"));
-        List<ClinicDto> clinics = List.of(
-                new ClinicDto(),
-                new ClinicDto()
-        );
-        return new DoctorDto(null, "First", "Last", dateOfBirth, "1234 Doctor St", "1234567890", "doctor@example.com", specialties, clinics, "INTERN");
+    @GetMapping("/doctors-dummy-create")
+    public DoctorCreateDto getDummyCreateDto() {
+        return DoctorCreateDto.builder()
+                .clinicIds(Set.of(6L, 7L))
+                .specialtyNames(Set.of("cardiology", "dermatology"))
+                .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(LocalDate.of(1980, 6, 15))
+                .address("123 Elm St")
+                .phoneNumber("+1234567890")
+                .email("john.doe@example.com")
+                .doctorType("INTERN")
+                .build();
     }
 
     @GetMapping("/doctorRecords-dummy")

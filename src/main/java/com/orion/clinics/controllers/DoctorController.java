@@ -1,7 +1,9 @@
 package com.orion.clinics.controllers;
 
+import com.orion.clinics.dtos.DoctorCreateDto;
 import com.orion.clinics.dtos.DoctorDto;
 import com.orion.clinics.dtos.DoctorRecordDto;
+import com.orion.clinics.dtos.DoctorUpdateDto;
 import com.orion.clinics.services.DoctorRecordService;
 import com.orion.clinics.services.DoctorService;
 import org.springframework.http.HttpStatus;
@@ -24,8 +26,8 @@ public class DoctorController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<DoctorDto> saveDoctor(@RequestBody DoctorDto doctorDto) {
-        DoctorDto savedDoctor = doctorService.save(doctorDto);
+    public ResponseEntity<DoctorDto> saveDoctor(@RequestBody DoctorCreateDto doctorCreateDto) {
+        DoctorDto savedDoctor = doctorService.save(doctorCreateDto);
         return new ResponseEntity<>(savedDoctor, HttpStatus.CREATED);
     }
     
@@ -53,8 +55,8 @@ public class DoctorController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DoctorDto> updateDoctorById(@PathVariable Long id, @RequestBody DoctorDto doctorDto) {
-        DoctorDto updatedDoctor = doctorService.update(id, doctorDto);
+    public ResponseEntity<DoctorDto> updateDoctorById(@PathVariable Long id, @RequestBody DoctorUpdateDto doctorUpdateDto) {
+        DoctorDto updatedDoctor = doctorService.update(id, doctorUpdateDto);
         return new ResponseEntity<>(updatedDoctor, HttpStatus.OK);
     }
 
