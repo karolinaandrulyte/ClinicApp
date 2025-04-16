@@ -1,6 +1,7 @@
 package com.orion.clinics.controllers;
 
 import com.orion.clinics.dtos.*;
+import com.orion.clinics.enums.DoctorType;
 import com.orion.clinics.enums.RecordStatus;
 import lombok.Builder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +60,7 @@ public class TestController {
                 .address("123 Elm St")
                 .phoneNumber("+1234567890")
                 .email("john.doe@example.com")
-                .doctorType("INTERN")
+                .doctorType(DoctorType.INTERN)
                 .build();
     }
 

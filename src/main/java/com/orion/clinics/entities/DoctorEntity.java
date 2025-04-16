@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity(name = "doctors")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "doctor_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "doctor_hierarchy", discriminatorType = DiscriminatorType.STRING)
 public abstract class DoctorEntity { // abstraction only for adding PECS in other layers
 
     @Id
@@ -57,6 +57,7 @@ public abstract class DoctorEntity { // abstraction only for adding PECS in othe
     )
     private List<ClinicEntity> clinics;
 
-    @Column(name = "doctor_type", insertable=false, updatable=false)
-    private String doctorType;
+    @ManyToOne
+    @JoinColumn(name = "doctor_type", referencedColumnName = "type", nullable = false)
+    private DoctorTypeEntity doctorType;
 }

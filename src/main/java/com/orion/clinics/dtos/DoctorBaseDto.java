@@ -1,5 +1,6 @@
 package com.orion.clinics.dtos;
 
+import com.orion.clinics.enums.DoctorType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -27,5 +28,5 @@ public class DoctorBaseDto {
     @Email(message = "The email format is incorrect. Follow: example@gmail.com")
     private String email;
 
-    private String doctorType;
+    private DoctorType doctorType;
 }

@@ -1,19 +1,22 @@
 package com.orion.clinics.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.orion.clinics.enums.DoctorType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "doctor_types")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "doctor_types")
 public class DoctorTypeEntity {
 
     @Id
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, unique = true)
+    private DoctorType type;
+
+    @Column(name = "description", nullable = false)
+    private String description;
 }

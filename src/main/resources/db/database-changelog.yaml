@@ -35,3 +35,15 @@ databaseChangeLog:
       sqlFile:
         path: 2025-04-08-update_doctor-records_dates.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 7
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-04-15-add_description_to_doctor-types.sql
+        relativeToChangelogFile: true
+  - changeSet:
+      id: 8
+      author: karolina.andrulyte
+      sqlFile:
+        path: 2025-04-15-add_doctor-hierarchy_column.sql
+        relativeToChangelogFile: true

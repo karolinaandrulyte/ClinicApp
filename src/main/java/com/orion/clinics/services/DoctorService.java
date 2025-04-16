@@ -79,7 +79,7 @@ public class DoctorService {
 
     @Transactional
     public List<DoctorDto> findByDoctorType(String doctorType) {
-        List<DoctorEntity> doctors = doctorRepository.findByDoctorType(doctorType);
+        List<DoctorEntity> doctors = doctorRepository.findByDoctorType_Type(doctorType);
         return doctors.stream()
                 .map(doctorMapper::toDoctorDto)
                 .collect(Collectors.toList());
